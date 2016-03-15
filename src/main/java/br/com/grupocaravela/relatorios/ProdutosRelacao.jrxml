@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
+<!-- 2016-03-08T12:26:16 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProdutosRelacao" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eac7f807-b02f-449c-a7c4-d91bf689bd81">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value="ZGVzYnJhdmFyLnVuaWRhZGUgLDI4MSwxNTcsNTI5ZmY4ZmMtMzBkZi00ZjlhLWJlM2EtM2U4ZjAw&#xA;MmI2ZmIzO2Rlc2JyYXZhci5wcm9kdXRvICwxNSwxNSw1OTRiYTEwMC1kM2FhLTRjOGQtYjMwOS0w&#xA;YTZiZGNjOTBlMzg7ZGVzYnJhdmFyLmNhdGVnb3JpYSAsMjgxLDI5MCw0ZjYyMjYwZC03MzkzLTQ5&#xA;MjgtOTgyYi1lNjNjMTM5MTM1MjA7"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MysqlDriver192.168.0.2"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="SansSerif" fontSize="26" isBold="true"/>
+	<style name="SubTitle" forecolor="#666666" fontName="SansSerif" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="SansSerif" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="SansSerif" fontSize="12"/>
+	<parameter name="IP_SERVIDOR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT desbravar.produto.id,
+	desbravar.produto.codigo,
+	desbravar.produto.nome,
+	desbravar.produto.quantidade_estoque,
+	desbravar.produto.valor_desejavel_venda,
+	desbravar.unidade.nome,
+	desbravar.categoria.nome,
+	desbravar.produto.ativo
+FROM desbravar.produto
+	INNER JOIN desbravar.unidade ON 
+	 desbravar.produto.unidade_id = desbravar.unidade.id 
+	INNER JOIN desbravar.categoria ON 
+	 desbravar.produto.categoria_id = desbravar.categoria.id 
+	 WHERE desbravar.produto.ativo = true
+ORDER BY desbravar.produto.nome ASC]]>
+	</queryString>
+	<field name="id" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="codigo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="quantidade_estoque" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="valor_desejavel_venda" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COLUMN_6" class="java.lang.String"/>
+	<field name="COLUMN_7" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement x="187" y="43" width="182" height="30" uuid="19eed770-ab06-468f-8a30-86dd7b779c96"/>
+				<textElement>
+					<font fontName="SansSerif" size="20"/>
+				</textElement>
+				<text><![CDATA[Lista de produtos]]></text>
+			</staticText>
+			<image>
+				<reportElement x="181" y="0" width="193" height="40" uuid="2c27d329-2527-42ee-8e95-70252d36fa3c"/>
+				<imageExpression><![CDATA["http://" + $P{IP_SERVIDOR} + "/desbravar/imagens/empresa/Logo_Comercio.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="b862e2eb-eaf9-476e-9db5-57ed083f99e6"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="3" width="50" height="15" uuid="a057c0b8-4d5d-484f-b73a-e928a494ed8a"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="50" y="3" width="90" height="15" uuid="88eb1ba0-3047-48a3-94be-32a6f52a02b7"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="140" y="3" width="160" height="15" uuid="a0e4db8d-3f3c-4035-8523-a9845a25c3ce"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="300" y="3" width="59" height="15" uuid="85f4b55e-d722-4496-9ab0-062ba223d04b"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Qtd]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="360" y="3" width="72" height="15" uuid="52f18e67-ce45-4998-84f4-51bfab2eef75"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[V. Venda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="433" y="3" width="40" height="15" uuid="8ee26838-31fa-402b-ae33-599a7a68673e"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Unid]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="474" y="3" width="79" height="15" uuid="4f1b96d0-af7b-446e-8a70-4e11b1d9dfe8"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Categoria]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="6" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="2" width="555" height="1" uuid="39f48c34-b6ee-47f7-8876-c3aaee1eb021"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="-16" width="50" height="15" uuid="d84e7f8b-7072-4ae7-b135-347fb325fce1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="50" y="-16" width="90" height="15" uuid="b0a90a40-d4b4-44c0-bd0d-2d42abd6db27"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="140" y="-16" width="160" height="15" uuid="26dcdd6d-11b3-473c-972e-e083c6f8ec2c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="300" y="-16" width="59" height="15" uuid="fc33d380-2d71-4608-8c2a-0ddee2e25771"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantidade_estoque}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00;¤ -#,##0.00">
+				<reportElement style="Detail" x="360" y="-16" width="72" height="15" uuid="6076d655-acb6-44bb-ae17-76fac2e81dad"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor_desejavel_venda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="433" y="-16" width="40" height="15" uuid="d6a9ca3b-c11e-4282-9fba-ccef7b38a4d6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COLUMN_6}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="474" y="-16" width="79" height="15" uuid="244f6d79-6324-4276-9ea0-4e6852f061c2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COLUMN_7}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="8" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="36" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="e535a8ac-10a9-4f26-87e0-60b805cdf9c3"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="fff3e988-d444-495e-be94-0eff0d0462e7"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="190" height="20" uuid="b6dc2968-370c-49a3-a17a-642c31c3ecd6"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="17" width="555" height="15" uuid="dbf36c14-88df-431f-9dbe-9103210a8a5b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Desbravar - Sistema desenvolvido e mantido pelo Grupo Caravela - www.grupocaravela.com.br]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

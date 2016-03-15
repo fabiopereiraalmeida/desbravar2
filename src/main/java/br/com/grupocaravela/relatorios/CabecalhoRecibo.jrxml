@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
+<!-- 2015-11-09T12:35:03 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CabecalhoRecibo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="94c414e7-357d-4041-b1c8-9ca36bf53474">
+	<parameter name="RAZAO_SOCIAL" class="java.lang.String"/>
+	<parameter name="FANTASIA" class="java.lang.String"/>
+	<parameter name="ENDERECO" class="java.lang.String"/>
+	<parameter name="END_NUMERO" class="java.lang.String"/>
+	<parameter name="APELIDO" class="java.lang.String"/>
+	<parameter name="BAIRRO" class="java.lang.String"/>
+	<parameter name="UF" class="java.lang.String"/>
+	<parameter name="TEL" class="java.lang.String"/>
+	<parameter name="CIDADE" class="java.lang.String"/>
+	<parameter name="CEP" class="java.lang.String"/>
+	<parameter name="ROTA" class="java.lang.String"/>
+	<parameter name="N_NOTA" class="java.lang.String"/>
+	<parameter name="COD_VENDA" class="java.lang.String"/>
+	<parameter name="FORMA_PAGAMENTO" class="java.lang.String"/>
+	<parameter name="DATA_HORA" class="java.lang.String"/>
+	<parameter name="VENDEDOR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="200" splitType="Stretch">
+			<staticText>
+				<reportElement x="200" y="-10" width="160" height="30" uuid="b39ba046-e42a-4acf-a1a2-e465950a2301"/>
+				<textElement verticalAlignment="Middle">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Comercial Record]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="123" y="20" width="335" height="22" uuid="1918f797-e6ca-4053-9ef4-4d754bbe21a4"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Comercia Record de Doces LTDA,	CNPJ: 06.927.088/0001-78]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="41" width="420" height="18" uuid="61e451d1-b810-4e4d-8a13-70d433b0d193"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Av. Conego Miguel Monteiro, 205 - Centro - Caculé - Bahia	CEP: 46.300-000]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="59" width="230" height="19" uuid="d55e94cd-94f7-4837-ba17-6aec06d1357a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tel: (77) 3455-2127 /  3455-1237]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="2" y="78" width="551" height="1" uuid="b241178f-726f-4080-add4-4b60eb77f4ac"/>
+			</line>
+			<staticText>
+				<reportElement x="2" y="80" width="70" height="20" uuid="257ef587-bfe1-4fac-811e-8e98745d5a66"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Razão Social:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="100" width="60" height="20" uuid="aa147b96-9a2b-461d-a5c1-8559a8323ce8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Endereço:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="80" width="50" height="20" uuid="437b5d66-78cc-4ddb-b881-09029d13837f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Fantasia:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="120" width="36" height="20" uuid="ee1da7b3-2a2a-41f4-9bd6-e1b86b47fe4e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Bairro:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="120" width="20" height="20" uuid="cc959b3c-ae25-4971-80b5-1a2f9eb7b51f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Uf:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="100" width="24" height="20" uuid="52425f29-9aa0-4404-b540-4a5780f224d3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Nº:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="100" width="50" height="20" uuid="65cd9ee7-8727-43de-b3eb-9272d950f1f0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Apelido:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="120" width="30" height="20" uuid="add73369-0126-4fe0-aeed-1a094138af2f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Tel:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="140" width="30" height="20" uuid="43cf41bf-9a4c-4850-872c-ac766a9adc67"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Rota:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="160" width="50" height="20" uuid="e7a39cac-afa1-4212-9399-64a06bfe24d9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Nº Nota:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="140" width="30" height="20" uuid="01ed454f-078c-491e-9729-f92e5eb69568"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[CEP:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="140" width="48" height="20" uuid="ce36fdb6-58cc-4cde-bda5-1200aa36af08"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Cidade:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="160" width="70" height="20" uuid="e685d252-b058-4dd6-92e2-9e023035f1cf"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Cod. Venda:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="160" width="100" height="20" uuid="5eb294ac-773b-4ab2-a546-776eb030a714"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Forma Pagamento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="180" width="64" height="20" uuid="89226076-0283-432b-b1bd-2cb344174626"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Data/ hora:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="180" width="70" height="20" uuid="9ec1a769-21b7-4df3-9440-5b6fb2fa5b0f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Vendedor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="72" y="80" width="258" height="20" uuid="8381aba5-5e63-405a-b0fe-9e5487d26b32"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{RAZAO_SOCIAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="80" width="163" height="20" uuid="4d03f1a8-a888-4bd0-b55e-8ff843fe64b8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FANTASIA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="100" width="163" height="20" uuid="927d56a1-2ca6-4225-8ef2-e0fc2b6b9ba6"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{APELIDO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="120" width="170" height="20" uuid="731635a9-aa73-480f-b22d-98c806845c3d"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{TEL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="140" width="183" height="20" uuid="fc4b4da8-b74e-4d5a-b317-4d42b62ecef8"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{ROTA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="411" y="160" width="142" height="20" uuid="873b3822-764f-4381-a792-cfa62398a38e"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{FORMA_PAGAMENTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="292" y="180" width="261" height="20" uuid="0fd22619-7e12-4a31-806f-62c8d12717ec"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{VENDEDOR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="62" y="100" width="206" height="20" uuid="c1fbf4a0-64ec-4c4c-9182-0dec0f8f2287"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ENDERECO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="292" y="100" width="48" height="20" uuid="df1a27d2-f23e-4e28-8b1f-1978b979aceb"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{END_NUMERO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="38" y="120" width="212" height="20" uuid="2b047036-b05b-4a1c-aee2-6c502d04de6d"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{BAIRRO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="120" width="50" height="20" uuid="38324860-a323-42ce-a3b6-53c67bafe86a"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{UF}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="50" y="140" width="160" height="20" uuid="61694456-5272-41fb-a3cb-6a635f4ec3e4"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{CIDADE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="140" width="100" height="20" uuid="2029e1c2-d1d5-4a30-93e8-611950b43fcc"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{CEP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="52" y="160" width="98" height="20" uuid="696d52c0-2c69-4237-a05f-0d3c6bb26101"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{N_NOTA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="160" width="90" height="20" uuid="ffd921dd-b0ca-4eae-8d9e-15e326665254"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{COD_VENDA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="67" y="180" width="143" height="20" uuid="a02bc915-a082-4d9d-a27a-8e84c55f7367"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{DATA_HORA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

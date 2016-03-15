@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
+<!-- 2016-03-08T12:17:14 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EspelhoProdutosVendidosRotaVendedor" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eac7f807-b02f-449c-a7c4-d91bf689bd81">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MysqlDriver192.168.0.2"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Dialog" fontSize="26" isBold="true"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Dialog" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Dialog" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Dialog" fontSize="12"/>
+	<parameter name="ID_USUARIO" class="java.lang.String"/>
+	<parameter name="ID_ROTA" class="java.lang.String"/>
+	<parameter name="DATA_INICIAL_SQL" class="java.lang.String"/>
+	<parameter name="DATA_FINAL_SQL" class="java.lang.String"/>
+	<parameter name="NOME_ROTA" class="java.lang.String"/>
+	<parameter name="NOME_USUARIO" class="java.lang.String"/>
+	<parameter name="DATA_INICIAL" class="java.lang.String"/>
+	<parameter name="DATA_FINAL" class="java.lang.String"/>
+	<parameter name="IP_SERVIDOR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT desbravar.venda_detalhe.quantidade,
+	desbravar.usuario.id,
+	desbravar.usuario.nome,
+	desbravar.rota.id,
+	desbravar.rota.nome,
+	desbravar.produto.codigo,
+	desbravar.produto.nome,
+	desbravar.venda_cabecalho.`dataVenda`
+FROM desbravar.venda_detalhe
+	INNER JOIN desbravar.venda_cabecalho ON 
+	 desbravar.venda_detalhe.venda_cabecalho_id = desbravar.venda_cabecalho.id 
+	INNER JOIN desbravar.usuario ON 
+	 desbravar.venda_cabecalho.usuario_id = desbravar.usuario.id 
+	INNER JOIN desbravar.produto ON 
+	 desbravar.venda_detalhe.produto_id = desbravar.produto.id 
+	INNER JOIN desbravar.cliente ON 
+	 desbravar.venda_cabecalho.cliente_id = desbravar.cliente.id 
+	INNER JOIN desbravar.rota ON 
+	 desbravar.cliente.rota_id = desbravar.rota.id	 
+WHERE
+    desbravar.venda_cabecalho.`dataVenda` BETWEEN  $P{DATA_INICIAL_SQL}  AND  $P{DATA_FINAL_SQL} 
+    AND desbravar.rota.id =  $P{ID_ROTA} 
+	 GROUP BY desbravar.produto.nome]]>
+	</queryString>
+	<field name="quantidade" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COLUMN_4" class="java.lang.Long"/>
+	<field name="COLUMN_5" class="java.lang.String"/>
+	<field name="codigo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COLUMN_7" class="java.lang.String"/>
+	<field name="dataVenda" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="103" splitType="Stretch">
+			<staticText>
+				<reportElement x="59" y="50" width="220" height="32" uuid="8f3b6f8a-69f3-4b52-a4ba-806f8037085c"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[Espelho de produtos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="321" y="46" width="78" height="16" uuid="26118745-d84e-4526-b0e2-e52af8273578"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Data Inicial:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="321" y="62" width="78" height="16" uuid="95f4bfd5-8b65-4706-9f89-29148a1aac1f"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Data Final:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="321" y="78" width="44" height="16" uuid="2f7a0a31-cc02-46bc-ade4-39fdac3c2ff3"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Rota:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="399" y="46" width="100" height="16" uuid="690360f3-3520-420a-a110-811abff6238f"/>
+				<textFieldExpression><![CDATA[$P{DATA_INICIAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="399" y="62" width="100" height="16" uuid="561c2727-0499-4563-8a4b-d23902e7971e"/>
+				<textFieldExpression><![CDATA[$P{DATA_FINAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="365" y="78" width="134" height="16" uuid="a50d93a5-d9fe-4192-a905-f18a119e0c19"/>
+				<textFieldExpression><![CDATA[$P{NOME_ROTA}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="181" y="0" width="193" height="40" uuid="07701ffd-1e71-4e47-8a4c-8a98bd515edf"/>
+				<imageExpression><![CDATA["http://" + $P{IP_SERVIDOR} + "/desbravar/imagens/empresa/Logo_Comercio.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="b862e2eb-eaf9-476e-9db5-57ed083f99e6"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="485" y="19" width="69" height="15" uuid="723fbf0e-87c2-425f-9068-85e29a8c80ed"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Qtd]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="1" y="19" width="129" height="15" uuid="29d7a482-e7fc-4340-9153-4b4acc1d03de"/>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="130" y="19" width="355" height="15" uuid="5be5dda5-b3ea-4bbd-a394-409b3912ee36"/>
+				<text><![CDATA[Descrição do produto]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="39f48c34-b6ee-47f7-8876-c3aaee1eb021"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="485" y="0" width="69" height="15" uuid="316055dc-f921-4b7c-92ee-e1159ea42d7a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="1" y="0" width="129" height="15" uuid="2051c6da-6112-4cea-a554-1d1b591c3f35"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="130" y="0" width="355" height="15" uuid="45c033ce-33db-4075-82a0-0dfc54f9032e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COLUMN_7}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="25" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="71ea44de-7a93-4d4f-a52c-4c16cd00015b"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="e535a8ac-10a9-4f26-87e0-60b805cdf9c3"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="fff3e988-d444-495e-be94-0eff0d0462e7"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="b6dc2968-370c-49a3-a17a-642c31c3ecd6"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="22" width="555" height="15" uuid="349427d1-abf7-4c72-9619-d0624628378e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Desbravar - Sistema desenvolvido e mantido pelo Grupo Caravela - www.grupocaravela.com.br]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
