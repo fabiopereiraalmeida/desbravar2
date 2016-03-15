@@ -69,7 +69,7 @@ public class JanelaAndroid extends JFrame {
 	// private EntityManagerFactory factory;
 	private EntityManager manager;
 	private EntityTransaction trx;
-
+//
 	private JPanel contentPane;
 	private JComboBox cbVendedor;
 	private JTable tableVendaAndroid;
