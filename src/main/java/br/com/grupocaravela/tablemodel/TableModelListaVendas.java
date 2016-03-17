@@ -12,7 +12,7 @@ public class TableModelListaVendas extends AbstractTableModel {
 
 	private ArrayList<VendaDetalhe> listaVendaDetalhe;
 	// Titulo das colunas
-	private String[] colunas = { "Codigo", "Nome", "Valor", "Qtd", "Valor parcial", "Desconto", "Total"};
+	private String[] colunas = { "Codigo", "Qtd", "Un", "Nome", "Valor", "Valor parcial", "Desconto", "Total"};
 
 	// Construtor
 	public TableModelListaVendas() {
@@ -57,21 +57,24 @@ public class TableModelListaVendas extends AbstractTableModel {
 			return this.listaVendaDetalhe.get(rowIndex).getProduto().getCodigo();
 
 		case 1:
-			return this.listaVendaDetalhe.get(rowIndex).getProduto().getNome();
-			
+			return this.listaVendaDetalhe.get(rowIndex).getQuantidade();
+						
 		case 2:
-			return this.listaVendaDetalhe.get(rowIndex).getProduto().getValorDesejavelVenda();
+			return this.listaVendaDetalhe.get(rowIndex).getProduto().getUnidade().getNome();
 			
 		case 3:
-			return this.listaVendaDetalhe.get(rowIndex).getQuantidade();
+			return this.listaVendaDetalhe.get(rowIndex).getProduto().getNome();
 			
 		case 4:
-			return this.listaVendaDetalhe.get(rowIndex).getValorParcial();
+			return this.listaVendaDetalhe.get(rowIndex).getProduto().getValorDesejavelVenda();
 			
 		case 5:
-			return this.listaVendaDetalhe.get(rowIndex).getValorDesconto();
+			return this.listaVendaDetalhe.get(rowIndex).getValorParcial();
 			
 		case 6:
+			return this.listaVendaDetalhe.get(rowIndex).getValorDesconto();
+			
+		case 7:
 			return this.listaVendaDetalhe.get(rowIndex).getValorTotal();
 
 		default:

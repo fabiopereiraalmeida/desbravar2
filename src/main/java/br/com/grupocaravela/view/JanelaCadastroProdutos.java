@@ -931,7 +931,7 @@ public class JanelaCadastroProdutos extends JFrame {
 		try {
 
 			//trx.begin();
-			Query consulta = manager.createQuery("from Unidade");
+			Query consulta = manager.createQuery("from Unidade ORDER BY nome ASC");
 			List<Unidade> listaUnidades = consulta.getResultList();
 			//trx.commit();
 
@@ -953,7 +953,7 @@ public class JanelaCadastroProdutos extends JFrame {
 		try {
 
 			//trx.begin();
-			Query consulta = manager.createQuery("from Categoria");
+			Query consulta = manager.createQuery("from Categoria ORDER BY nome ASC");
 			List<Categoria> listaCategorias = consulta.getResultList();
 			//trx.commit();
 

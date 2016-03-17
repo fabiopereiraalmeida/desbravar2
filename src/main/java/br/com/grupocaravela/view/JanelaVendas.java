@@ -856,16 +856,18 @@ public class JanelaVendas extends JFrame {
 		NumberFormat numeroMoeda = NumberFormat.getNumberInstance();
 		numeroMoeda.setMinimumFractionDigits(2);
 		DefaultTableCellRenderer cellRendererCustomMoeda = new MoedaRender(numeroMoeda);
-		tableProdutos.getColumnModel().getColumn(2).setCellRenderer(cellRendererCustomMoeda);
 		tableProdutos.getColumnModel().getColumn(4).setCellRenderer(cellRendererCustomMoeda);
 		tableProdutos.getColumnModel().getColumn(5).setCellRenderer(cellRendererCustomMoeda);
 		tableProdutos.getColumnModel().getColumn(6).setCellRenderer(cellRendererCustomMoeda);
+		tableProdutos.getColumnModel().getColumn(7).setCellRenderer(cellRendererCustomMoeda);
 	}
 
 	private void tamanhoColunas() {
 		// tableProdutos.setAutoResizeMode(tableProdutos.AUTO_RESIZE_OFF);
-		tableProdutos.getColumnModel().getColumn(1).setWidth(330);
-		tableProdutos.getColumnModel().getColumn(1).setMinWidth(330);
+		tableProdutos.getColumnModel().getColumn(0).setWidth(120);
+		tableProdutos.getColumnModel().getColumn(0).setMinWidth(120);
+		tableProdutos.getColumnModel().getColumn(3).setWidth(350);
+		tableProdutos.getColumnModel().getColumn(3).setMinWidth(350);
 
 	}
 

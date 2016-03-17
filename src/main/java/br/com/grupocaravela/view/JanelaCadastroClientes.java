@@ -1472,14 +1472,14 @@ public class JanelaCadastroClientes extends JFrame {
 		tfDataCadastro.setText("");
 		tpObservacao.setText("");
 		dcDataNasc.setDate(dataAtual());
-		cbTelefonesCadastrados.removeAll();
+		cbTelefonesCadastrados.removeAllItems();
 		cbTipoTelefone.setSelectedIndex(0);
 		ftfNumeroTelefone.setText("");
-		cbEnderecosCadastrados.removeAll();
+		cbEnderecosCadastrados.removeAllItems();
 		tfEndereco.setText("");
 		tfNumeroEndereco.setText("");
 		tfBairro.setText("");
-		cbCidade.removeAll();
+		cbCidade.removeAllItems();
 		tfUf.setText("");
 		ftfCep.setText("");
 		
@@ -1640,7 +1640,7 @@ public class JanelaCadastroClientes extends JFrame {
 		try {
 
 			//trx.begin();
-			Query consulta = manager.createQuery("from Rota");
+			Query consulta = manager.createQuery("from Rota ORDER BY nome ASC");
 			List<Rota> listaRotas = consulta.getResultList();
 			//trx.commit();
 
@@ -1662,7 +1662,7 @@ public class JanelaCadastroClientes extends JFrame {
 		try {
 
 			//trx.begin();
-			Query consulta = manager.createQuery("from Cidade");
+			Query consulta = manager.createQuery("from Cidade ORDER BY nome ASC");
 			List<Cidade> listaCidades = consulta.getResultList();
 			//trx.commit();
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
-<!-- 2016-03-08T22:54:42 -->
+<!-- 2016-03-16T22:27:59 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ComprovanteVenda" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eac7f807-b02f-449c-a7c4-d91bf689bd81">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -490,7 +490,7 @@ WHERE
 				<text><![CDATA[codigo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="69" y="4" width="184" height="15" uuid="15e9a120-a6bf-4fb3-8491-49dd6c450559"/>
+				<reportElement style="Column header" x="136" y="4" width="182" height="15" uuid="15e9a120-a6bf-4fb3-8491-49dd6c450559"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Dialog" size="10"/>
 				</textElement>
@@ -504,7 +504,7 @@ WHERE
 				<text><![CDATA[V. Unit]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="254" y="4" width="32" height="15" uuid="288499ea-28dd-4f7b-9dca-ce2fcb123944"/>
+				<reportElement style="Column header" x="70" y="4" width="32" height="15" uuid="288499ea-28dd-4f7b-9dca-ce2fcb123944"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Dialog" size="10"/>
 				</textElement>
@@ -532,7 +532,7 @@ WHERE
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="286" y="4" width="34" height="15" uuid="91d7cf4b-bb20-472c-8243-476f3a1b5c1f"/>
+				<reportElement style="Column header" x="102" y="4" width="34" height="15" uuid="91d7cf4b-bb20-472c-8243-476f3a1b5c1f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Dialog" size="10"/>
 				</textElement>
@@ -549,28 +549,28 @@ WHERE
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement style="Detail" x="-1" y="0" width="69" height="15" uuid="28653b02-1d0d-497d-a84e-a68785f16dfa"/>
+				<reportElement style="Detail" x="-1" y="0" width="71" height="15" uuid="28653b02-1d0d-497d-a84e-a68785f16dfa"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="68" y="0" width="184" height="15" uuid="243625ed-bfd7-41ac-b4a1-cf5bd123b449"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement style="Detail" x="136" y="0" width="182" height="15" uuid="243625ed-bfd7-41ac-b4a1-cf5bd123b449"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00;¤ -#,##0.00">
-				<reportElement style="Detail" x="320" y="0" width="50" height="15" uuid="f463887d-9c23-456d-98c8-9f69aca61224"/>
+				<reportElement style="Detail" x="319" y="0" width="50" height="15" uuid="f463887d-9c23-456d-98c8-9f69aca61224"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valor_desejavel_venda}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="254" y="0" width="32" height="15" uuid="4a06cf39-edfc-4b16-a4bc-e218faf8aa37"/>
+				<reportElement style="Detail" x="70" y="0" width="32" height="15" uuid="4a06cf39-edfc-4b16-a4bc-e218faf8aa37"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
@@ -598,7 +598,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{valor_total}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="286" y="0" width="34" height="15" uuid="eb1207fd-d1d3-444b-9780-c79e06cac98a"/>
+				<reportElement style="Detail" x="102" y="0" width="34" height="15" uuid="eb1207fd-d1d3-444b-9780-c79e06cac98a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
