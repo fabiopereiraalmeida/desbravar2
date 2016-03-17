@@ -264,13 +264,13 @@ public class Update {
 			try {
 				if ("Linux".equals(sistema)) {
 					Runtime.getRuntime().exec("java -jar /opt/GrupoCaravela/software/sistema/Desbravar2.jar");
-					System.exit(0);
 				} else {
 					Runtime.getRuntime().exec("java -jar c:\\GrupoCaravela\\software\\sistema\\Desbravar2.jar");
-					System.exit(0);
 				}
+				System.exit(0);
 
 			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "ERRO! Erro ao atualizar o sistema! Procurar o suporte Tecnico!!!");
 			}
 
 		} catch (Exception exception) {

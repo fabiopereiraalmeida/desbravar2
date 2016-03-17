@@ -1370,11 +1370,48 @@ public class JanelaMenuPrincipal extends JFrame {
 		btnLogoff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				dispose();
-				
-				JanelaLogin jnLogin = new JanelaLogin();
-				jnLogin.setVisible(true);
-				jnLogin.setLocationRelativeTo(null);
+				// #############################################
+				final Thread tr = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							TimeUnit.SECONDS.sleep(0);
+						} catch (InterruptedException ex) {
+							Logger.getLogger(JanelaMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+						}
+						// ######################METODO A SER
+						// EXECUTADO##############################
+						JanelaLogin jnLogin = new JanelaLogin();
+						jnLogin.setVisible(true);
+						jnLogin.setLocationRelativeTo(null);
+						
+						dispose();
+						// ######################FIM METODO A SER
+						// EXECUTADO##############################
+					}
+				});
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						tr.start();
+						// .....
+						EsperaJanela espera = new EsperaJanela();
+						espera.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+						espera.setUndecorated(true);
+						espera.setVisible(true);
+						espera.setLocationRelativeTo(null);
+						try {
+							tr.join();
+							espera.dispose();
+
+						} catch (InterruptedException ex) {
+							// Logger.getLogger(MenuView.class.getName()).log(Level.SEVERE,
+							// null, ex);
+						}
+					}
+				}).start();
+
+				// ###############################################
 				
 			}
 		});

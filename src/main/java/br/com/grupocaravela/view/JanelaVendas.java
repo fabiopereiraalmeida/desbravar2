@@ -204,6 +204,12 @@ public class JanelaVendas extends JFrame {
 		lblProduto.setFont(new Font("Dialog", Font.BOLD, 18));
 
 		tfCodProduto = new JTextField();
+		tfCodProduto.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				tfCodProduto.selectAll();
+			}
+		});
 		tfCodProduto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -240,7 +246,12 @@ public class JanelaVendas extends JFrame {
 			public void keyPressed(KeyEvent e) {
 
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					addListaVenda(produtoImportado, Double.parseDouble(tfQtdProduto.getText()), 0.0);
+					if (verificaEstoque(produtoImportado, Double.parseDouble(tfQtdProduto.getText()))) {
+						JOptionPane.showMessageDialog(null, "A quantidade informada para este produto é menor que o estoque dispovivel! Favor verificar!!!");
+						tfCodProduto.requestFocus();
+					}else{				
+						addListaVenda(produtoImportado, Double.parseDouble(tfQtdProduto.getText()), 0.0);
+					}
 				}
 
 			}
@@ -253,8 +264,13 @@ public class JanelaVendas extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// JOptionPane.showMessageDialog(null,
 				// produtoImportado.getNome());
-				addListaVenda(produtoImportado, Double.parseDouble(tfQtdProduto.getText()), 0.0);
-
+				
+				if (verificaEstoque(produtoImportado, Double.parseDouble(tfQtdProduto.getText()))) {
+					JOptionPane.showMessageDialog(null, "A quantidade informada para este produto é menor que o estoque dispovivel! Favor verificar!!!");
+					tfCodProduto.requestFocus();
+				}else{				
+					addListaVenda(produtoImportado, Double.parseDouble(tfQtdProduto.getText()), 0.0);
+				}
 			}
 		});
 		btOk.setIcon(new ImageIcon(JanelaVendas.class.getResource("/br/com/grupocaravela/icones/aprovar_24.png")));
@@ -1589,5 +1605,17 @@ public class JanelaVendas extends JFrame {
 		} catch (Exception e1) {
 			JOptionPane.showMessageDialog(null, "Erro ao gerar relatório! " + e1.getMessage() );
 		}
+	}
+	
+	private boolean verificaEstoque(Produto prod, Double qtd){
+		boolean retorno = false;
+		
+		Double resultado = prod.getQuantidadeEstoque() - qtd;
+		
+		if (resultado < 0) {
+			retorno = true;
+		}
+		
+		return retorno;
 	}
 }
