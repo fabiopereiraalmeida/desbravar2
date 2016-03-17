@@ -6,12 +6,10 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +20,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -57,11 +57,23 @@ import br.com.grupocaravela.objeto.Produto;
 import br.com.grupocaravela.objeto.Usuario;
 import br.com.grupocaravela.objeto.VendaCabecalho;
 import br.com.grupocaravela.objeto.VendaDetalhe;
+import br.com.grupocaravela.relatorios.ChamaRelatorio;
 import br.com.grupocaravela.relatorios.ChamaRelatorioComprovanteVenda;
 import br.com.grupocaravela.relatorios.ChamaRelatorioComprovanteVenda2Via;
+import br.com.grupocaravela.relatorios.ChamaRelatorioReciboVenda;
 import br.com.grupocaravela.render.MoedaRender;
+import br.com.grupocaravela.repositorio.RepositorioCreditoUsuario;
+import br.com.grupocaravela.repositorio.RepositorioProduto;
+import br.com.grupocaravela.repositorio.RepositorioUsuario;
 import br.com.grupocaravela.tablemodel.TableModelListaVendas;
 import br.com.grupocaravela.util.UsuarioLogado;
+import net.sf.jasperreports.engine.JRException;
+
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import com.toedter.calendar.JDateChooser;
 
 public class JanelaVendas extends JFrame {
 
@@ -119,9 +131,6 @@ public class JanelaVendas extends JFrame {
 	// private RepositorioCreditoUsuario repositorioCreditoUsuario;
 
 	private CreditoUsuario creditoUsuario;
-	private JTextField tfJuros;
-	private JLabel lblJuros_1;
-	private JTextField tfValorJuros;
 
 	/**
 	 * Launch the application.
@@ -244,23 +253,7 @@ public class JanelaVendas extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// JOptionPane.showMessageDialog(null,
 				// produtoImportado.getNome());
-
-				Double qtdEstoque = produtoImportado.getQuantidadeEstoque();
-				Double qtdVenda = Double.parseDouble(tfQtdProduto.getText());
-
-				Double result = qtdEstoque - qtdVenda;
-
-				if (result >= 0) {
-					addListaVenda(produtoImportado, Double.parseDouble(tfQtdProduto.getText()), 0.0);
-				} else {
-					JOptionPane.showMessageDialog(null, "Estoque insuficiente de " + produtoImportado.getNome()
-							+ " para esta venda. Favor verificar!");
-
-					tfCodProduto.setText("");
-					tfQtdProduto.setText("1.0");
-
-					tfCodProduto.requestFocus();
-				}
+				addListaVenda(produtoImportado, Double.parseDouble(tfQtdProduto.getText()), 0.0);
 
 			}
 		});
@@ -298,7 +291,6 @@ public class JanelaVendas extends JFrame {
 				new TitledBorder(null, "Dados do vendedor", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		btBuscaProduto = new JButton("");
-		btBuscaProduto.setEnabled(false);
 		btBuscaProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -347,13 +339,6 @@ public class JanelaVendas extends JFrame {
 		});
 		btBuscaProduto
 				.setIcon(new ImageIcon(JanelaVendas.class.getResource("/br/com/grupocaravela/icones/lupa_24.png")));
-
-		lblJuros_1 = new JLabel("Juros");
-		lblJuros_1.setFont(new Font("Dialog", Font.BOLD, 18));
-
-		tfValorJuros = new DecimalFormattedField(DecimalFormattedField.REAL);
-		tfValorJuros.setFont(new Font("Dialog", Font.PLAIN, 18));
-		tfValorJuros.setColumns(10);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
@@ -366,17 +351,13 @@ public class JanelaVendas extends JFrame {
 										.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 1064, Short.MAX_VALUE)
 										.addGroup(gl_contentPane.createSequentialGroup().addComponent(lblSubTotal)
 												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(tfSubTotal, GroupLayout.PREFERRED_SIZE, 131,
-														GroupLayout.PREFERRED_SIZE)
+												.addComponent(tfSubTotal, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblDesconto)
 										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(tfDesconto, GroupLayout.PREFERRED_SIZE, 114,
+										.addComponent(tfDesconto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblJuros_1)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(tfValorJuros, GroupLayout.PREFERRED_SIZE, 118,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+										.addPreferredGap(ComponentPlacement.RELATED, 186, Short.MAX_VALUE)
 										.addComponent(lblTotalGeral).addPreferredGap(ComponentPlacement.RELATED)
 										.addComponent(tfTotalGeral, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
@@ -419,13 +400,10 @@ public class JanelaVendas extends JFrame {
 				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(lblSubTotal)
 						.addComponent(tfSubTotal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblTotalGeral)
-						.addComponent(tfTotalGeral, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblDesconto)
 						.addComponent(tfDesconto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblJuros_1).addComponent(tfValorJuros, GroupLayout.PREFERRED_SIZE,
+						.addComponent(lblTotalGeral).addComponent(tfTotalGeral, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addPreferredGap(ComponentPlacement.RELATED)
 				.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE).addContainerGap()));
@@ -448,24 +426,24 @@ public class JanelaVendas extends JFrame {
 		JLabel lblFormaDePagamento = new JLabel("Forma de pagamento");
 
 		cbFormaPagamento = new JComboBox();
-		cbFormaPagamento.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				FormaPagamento formPag = (FormaPagamento) cbFormaPagamento.getSelectedItem();
-				tfJuros.setText(formPag.getJuros().toString());
 
-				tfTotalGeral.setText(calcularValorTotalGeral().toString());
+		JButton btnInserirValorDa = new JButton("Inserir valor da nota");
+		btnInserirValorDa.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				valorNotaIndividual = Double.parseDouble(JOptionPane.showInputDialog("Infome o valor da nota", "1")
+						.replace("R$ ", "").replace(".", "").replace(",", "."));
+				tfTotalGeral.setText(valorNotaIndividual.toString());
+
+				btnFinalizarF.setEnabled(true);
+
 			}
 		});
 
 		JLabel lblVencimento = new JLabel("Vencimento");
 
 		JComboBox comboBox = new JComboBox();
-
-		JLabel lblJuros = new JLabel("Juros");
-
-		tfJuros = new DecimalFormattedField(DecimalFormattedField.PORCENTAGEM);
-		tfJuros.setEditable(false);
-		tfJuros.setColumns(10);
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_3.createSequentialGroup().addContainerGap()
@@ -480,14 +458,12 @@ public class JanelaVendas extends JFrame {
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addComponent(cbFormaPagamento, GroupLayout.PREFERRED_SIZE, 310,
 										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblJuros)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(tfJuros, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblVencimento)
 								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)))
-				.addContainerGap(56, Short.MAX_VALUE)));
+								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+								.addComponent(btnInserirValorDa)))
+						.addContainerGap()));
 		gl_panel_3.setVerticalGroup(gl_panel_3.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_3.createSequentialGroup().addContainerGap()
 						.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -501,12 +477,11 @@ public class JanelaVendas extends JFrame {
 				.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE).addComponent(lblFormaDePagamento)
 						.addComponent(cbFormaPagamento, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblJuros)
-						.addComponent(tfJuros, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblVencimento).addComponent(comboBox, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addGroup(gl_panel_3.createSequentialGroup().addContainerGap(47, Short.MAX_VALUE)
+						.addComponent(btnInserirValorDa).addContainerGap()));
 		panel_3.setLayout(gl_panel_3);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -548,83 +523,54 @@ public class JanelaVendas extends JFrame {
 				new ImageIcon(JanelaVendas.class.getResource("/br/com/grupocaravela/icones/alerta_amarelo_24.png")));
 
 		btnFinalizarF = new JButton("Finalizar - F11");
-
 		btnFinalizarF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				if (cbUsuario.getSelectedItem() == null) {
+					JOptionPane.showMessageDialog(null, "Antes de finalizar a venda, é necessario escolher o vendedor");
+					cbUsuario.requestFocus();
+				} else {
 
-				FormaPagamento formPag = (FormaPagamento) cbFormaPagamento.getSelectedItem();
-
-				Double limiteMinimo = formPag.getValorMinimo();
-				Double valorVenda = Double
-						.valueOf(tfTotalGeral.getText().replace("R$ ", "").replace(".", "").replace(",", "."));
-
-				if (valorVenda >= limiteMinimo) {
-
-					if (cbUsuario.getSelectedItem() == null) {
+					if (cliente == null) {
 						JOptionPane.showMessageDialog(null,
-								"Antes de finalizar a venda, é necessario escolher o vendedor");
-						cbUsuario.requestFocus();
+								"Antes de finalizar a venda, é necessario escolher o cliente");
+
 					} else {
 
-						if (cliente == null) {
-							JOptionPane.showMessageDialog(null,
-									"Antes de finalizar a venda, é necessario escolher o cliente");
+						Object[] options = { "Sim", "Não" };
+						int i = JOptionPane.showOptionDialog(null, "ATENÇÃO!!! Finalizar a venda?", "Finalizar Venda",
+								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
-						} else {
+						if (i == JOptionPane.YES_OPTION) {
 
-							if (cbFormaPagamento.getSelectedIndex() == -1) {
-								JOptionPane.showMessageDialog(null,
-										"Antes de finalizar a venda, é necessario escolher uma forma de pagamento");
-								cbFormaPagamento.requestFocus();
+							if (valorNotaIndividual != 0.0) {
+								acaoFinalizarVendaValorIndividual(cliente, (Usuario) cbUsuario.getSelectedItem(),
+										(FormaPagamento) cbFormaPagamento.getSelectedItem(), vendaCabecalho,
+										valorNotaIndividual);
+								valorNotaIndividual = 0.0;
+								
+								//imprimirComprovante();
 							} else {
 
-								Object[] options = { "Sim", "Não" };
-								int i = JOptionPane.showOptionDialog(null, "ATENÇÃO!!! Finalizar a venda?",
-										"Finalizar Venda", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-										null, options, options[0]);
+								if (verificaValorMinimoFormaPagamento(calcularValorTotalGeral()) == true) {
+									acaoFinalizarVenda(cliente, usuario,
+											(FormaPagamento) cbFormaPagamento.getSelectedItem(), vendaCabecalho,
+											listaVendaDetalhes);
+									
+									//imprimirComprovante();
 
-								if (i == JOptionPane.YES_OPTION) {
-
-									if (valorNotaIndividual != 0.0) {
-										acaoFinalizarVendaValorIndividual(cliente,
-												(Usuario) cbUsuario.getSelectedItem(),
-												(FormaPagamento) cbFormaPagamento.getSelectedItem(), vendaCabecalho,
-												valorNotaIndividual);
-										valorNotaIndividual = 0.0;
-
-										ativarProdutos(false);
-
-										// imprimirComprovante();
-									} else {
-
-										if (verificaValorMinimoFormaPagamento(calcularValorTotalGeral()) == true) {
-											acaoFinalizarVenda(cliente, usuario,
-													(FormaPagamento) cbFormaPagamento.getSelectedItem(), vendaCabecalho,
-													listaVendaDetalhes);
-
-											ativarProdutos(false);
-											// imprimirComprovante();
-
-										} else {
-											FormaPagamento fp = (FormaPagamento) cbFormaPagamento.getSelectedItem();
-											JOptionPane.showMessageDialog(null,
-													"ATENÇÃO!!! Valor minimo para esta forma de pagamento é de R$"
-															+ fp.getValorMinimo()
-															+ "! Favor optar por outra forma de pagamento! ");
-											cbFormaPagamento.requestFocus();
-										}
-
-									}
+								} else {
+									FormaPagamento fp = (FormaPagamento) cbFormaPagamento.getSelectedItem();
+									JOptionPane.showMessageDialog(null,
+											"ATENÇÃO!!! Valor minimo para esta forma de pagamento é de R$"
+													+ fp.getValorMinimo()
+													+ "! Favor optar por outra forma de pagamento! ");
+									cbFormaPagamento.requestFocus();
 								}
+
 							}
 						}
 					}
-
-				} else {
-					JOptionPane.showMessageDialog(null,
-							"Valor de venda insuficiente para a forma de pagamento selecionada (R$ " + limiteMinimo
-									+ "). Favor escolher outra forma de pagamento!");
-					cbFormaPagamento.requestFocus();
 				}
 
 			}
@@ -702,21 +648,81 @@ public class JanelaVendas extends JFrame {
 		});
 		btnDescontoF
 				.setIcon(new ImageIcon(JanelaVendas.class.getResource("/br/com/grupocaravela/icones/gastos_24.png")));
+		
+		JButton button = new JButton("0");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				//#################### INICIO CAPTURANDO ENDEREÇO ###################
+				EnderecoCliente enderecoCliente = null;
+				try {
+					enderecoCliente = cliente.getEnderecos().get(0);
+				} catch (Exception e2) {
+					enderecoCliente = null;
+				}
+				//#################### FIM CAPTURANDO ENDEREÇO ###################
+				
+				//################## INICIO CAPTURANDO FORMA DE PAGAMENTO ####################
+				FormaPagamento f = (FormaPagamento) cbFormaPagamento.getSelectedItem();
+				//################## FIM CAPTURANDO FORMA DE PAGAMENTO ####################
+				
+				//###################### INICIO PEGANDO DATA VENCIMENRTO ###################
+				
+				GregorianCalendar gcGregorian = new GregorianCalendar();
+				gcGregorian.setTime(dataAtual());
+
+				gcGregorian.set(GregorianCalendar.DAY_OF_MONTH, gcGregorian.get(GregorianCalendar.DAY_OF_MONTH) + (f.getNumeroDias()));
+
+				
+				String dtVencimento = format.format(gcGregorian.getTime());
+				
+				//###################### FIM PEGANDO DATA VENCIMENRTO ###################
+								
+				ChamaRelatorioComprovanteVenda chamaRelatorio = new ChamaRelatorioComprovanteVenda();
+								
+				try {							
+					
+					//chamaRelatorio.report((Usuario) cbUsuario.getSelectedItem(), cliente, enderecoCliente, f.getNome(), format.format(dataAtual()), dtVencimento, vendaCabecalho.getId().toString());
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Erro ao gerar relatório! " + e1.getMessage() );
+				}
+				
+			}
+		});
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
-		gl_panel_1.setHorizontalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup().addContainerGap().addComponent(btnNovavenda)
-						.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnCancelarVenda)
-						.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnExcluirItem)
-						.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnAlterarQtd)
-						.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnDescontoF)
-						.addPreferredGap(ComponentPlacement.RELATED, 111, Short.MAX_VALUE).addComponent(btnFinalizarF)
-						.addContainerGap()));
-		gl_panel_1.setVerticalGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel_1.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE).addComponent(btnNovavenda)
-								.addComponent(btnCancelarVenda).addComponent(btnFinalizarF).addComponent(btnExcluirItem)
-								.addComponent(btnAlterarQtd).addComponent(btnDescontoF))
-						.addContainerGap()));
+		gl_panel_1.setHorizontalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnNovavenda)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnCancelarVenda)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnExcluirItem)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnAlterarQtd)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnDescontoF)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(button)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnFinalizarF)
+					.addContainerGap())
+		);
+		gl_panel_1.setVerticalGroup(
+			gl_panel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnNovavenda)
+						.addComponent(btnCancelarVenda)
+						.addComponent(btnFinalizarF)
+						.addComponent(btnExcluirItem)
+						.addComponent(btnAlterarQtd)
+						.addComponent(btnDescontoF)
+						.addComponent(button))
+					.addContainerGap())
+		);
 		panel_1.setLayout(gl_panel_1);
 
 		JLabel lblCliente = new JLabel("Cliente");
@@ -744,15 +750,10 @@ public class JanelaVendas extends JFrame {
 						// EXECUTADO##############################
 
 						acaoBuscarCliente();
-
-						if (cliente != null) {
-							ativarProdutos(true);
-							tfCodProduto.requestFocus();
-						}
+						tfCodProduto.requestFocus();
 
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
-
 					}
 				});
 				new Thread(new Runnable() {
@@ -909,7 +910,6 @@ public class JanelaVendas extends JFrame {
 	}
 
 	private void limparCampos() {
-		tfValorJuros.setText("0.0");
 		tfCredito.setText("0.0");
 		tfCodProduto.setText("");
 		tfDesconto.setText("0.0");
@@ -922,20 +922,13 @@ public class JanelaVendas extends JFrame {
 		tfSubTotal.setText("0.0");
 		tfTotalGeral.setText("0.0");
 
-		cbFormaPagamento.setSelectedIndex(-1);
-
 		listaVendaDetalhes.clear();
 		limparTabela();
 	}
 
 	private void acaoNovaVenda() {
-
-		cliente = null;
-
+		
 		ativarVenda();
-
-		ativarProdutos(true);
-
 		limparTabela();
 		limparCampos();
 
@@ -946,8 +939,7 @@ public class JanelaVendas extends JFrame {
 
 		buscarCreditoUsuario();
 
-		// btBuscaCliente.requestFocus();
-		tfCodProduto.requestFocus();
+		btBuscaCliente.requestFocus();
 	}
 
 	private void carregajcbUsuario() {
@@ -995,9 +987,6 @@ public class JanelaVendas extends JFrame {
 				cbFormaPagamento.addItem(f);
 			}
 
-			FormaPagamento formPag = (FormaPagamento) cbFormaPagamento.getSelectedItem();
-			tfJuros.setText(formPag.getJuros().toString());
-
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro no carregamento da rota selecionada! " + e);
 			trx.commit();
@@ -1014,6 +1003,7 @@ public class JanelaVendas extends JFrame {
 
 	private void desativarVenda() {
 		btBuscaCliente.setEnabled(false);
+		btBuscaProduto.setEnabled(false);
 		btOk.setEnabled(false);
 		tfCodProduto.setEnabled(false);
 		tfQtdProduto.setEnabled(false);
@@ -1030,22 +1020,12 @@ public class JanelaVendas extends JFrame {
 
 	}
 
-	private void ativarProdutos(boolean b) {
-
-		btBuscaProduto.setEnabled(b);
-		btOk.setEnabled(b);
-		tfCodProduto.setEnabled(b);
-		tfQtdProduto.setEnabled(b);
-
-	}
-
 	private void ativarVenda() {
-
-		/*
-		 * btBuscaProduto.setEnabled(true); btOk.setEnabled(true);
-		 * tfCodProduto.setEnabled(true); tfQtdProduto.setEnabled(true);
-		 */
 		btBuscaCliente.setEnabled(true);
+		btBuscaProduto.setEnabled(true);
+		btOk.setEnabled(true);
+		tfCodProduto.setEnabled(true);
+		tfQtdProduto.setEnabled(true);
 		btnAlterarQtd.setEnabled(true);
 		btnCancelarVenda.setEnabled(true);
 		btnDescontoF.setEnabled(true);
@@ -1054,7 +1034,6 @@ public class JanelaVendas extends JFrame {
 
 		cbUsuario.setEnabled(true);
 		cbFormaPagamento.setEnabled(true);
-		cbFormaPagamento.setSelectedIndex(0);
 
 		btnNovavenda.setEnabled(false);
 
@@ -1265,18 +1244,18 @@ public class JanelaVendas extends JFrame {
 			trx.begin();
 			manager.persist(v);
 			trx.commit();
-
+			
 			Object[] options = { "Sim", "Não" };
 			int i = JOptionPane.showOptionDialog(null, "Gerar 2ª via do comprovante de venda?", "2ª via",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
 			if (i == JOptionPane.YES_OPTION) {
-				imprimirComprovante(v, c, f, u);
-				imprimirComprovante2Via(v, c, f, u);
-			} else {
-				imprimirComprovante(v, c, f, u);
+				imprimirComprovante(v,c,f,u);
+				imprimirComprovante2Via(v,c,f,u);
+			}else {
+				imprimirComprovante(v,c,f,u);
 			}
-
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao finalizar a venda!" + e);
 		}
@@ -1286,7 +1265,7 @@ public class JanelaVendas extends JFrame {
 		} else {
 			criarCaixa(v);
 		}
-
+		
 		baixaEstoque(v);
 
 		limparCampos();
@@ -1313,16 +1292,16 @@ public class JanelaVendas extends JFrame {
 		trx.begin();
 		manager.persist(v);
 		trx.commit();
-
+		
 		Object[] options = { "Sim", "Não" };
 		int i2 = JOptionPane.showOptionDialog(null, "Gerar 2ª via do comprovante de venda?", "2ª via",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
 		if (i2 == JOptionPane.YES_OPTION) {
-			imprimirComprovante(v, c, f, u);
-			imprimirComprovante2Via(v, c, f, u);
-		} else {
-			imprimirComprovante(v, c, f, u);
+			imprimirComprovante(v,c,f,u);
+			imprimirComprovante2Via(v,c,f,u);
+		}else {
+			imprimirComprovante(v,c,f,u);
 		}
 
 		if (f.getNumeroDias() > 0) {
@@ -1336,7 +1315,7 @@ public class JanelaVendas extends JFrame {
 		}
 
 		JOptionPane.showMessageDialog(null, "Venda concluida com sucesso!");
-
+		
 		limparCampos();
 		desativarVenda();
 
@@ -1443,16 +1422,6 @@ public class JanelaVendas extends JFrame {
 			valorTotalGeral = valorTotalGeral + listaVendaDetalhes.get(i).getValorTotal();
 		}
 
-		// Calculando juros da forma de pagamento
-
-		FormaPagamento forJur = (FormaPagamento) cbFormaPagamento.getSelectedItem();
-
-		Double j = valorTotalGeral / 100;
-
-		tfValorJuros.setText(String.valueOf(j * forJur.getJuros()));
-
-		valorTotalGeral = valorTotalGeral + (j * forJur.getJuros());
-
 		return valorTotalGeral;
 	}
 
@@ -1467,16 +1436,15 @@ public class JanelaVendas extends JFrame {
 	private void baixaEstoque(VendaCabecalho vc) {
 
 		try {
-
-			Query consulta = manager
-					.createQuery("from VendaDetalhe where venda_cabecalho_id like '" + vc.getId() + "'");
+			
+			Query consulta = manager.createQuery("from VendaDetalhe where venda_cabecalho_id like '" + vc.getId() + "'");
 			List<VendaDetalhe> listaVendaDetalhe = consulta.getResultList();
-
+			
 			for (int i = 0; i < listaVendaDetalhe.size(); i++) {
 				Produto p = listaVendaDetalhe.get(i).getProduto();
-
+				
 				p.setQuantidadeEstoque(p.getQuantidadeEstoque() - listaVendaDetalhe.get(i).getQuantidade());
-
+				
 				trx.begin();
 				manager.merge(p);
 				trx.commit();
@@ -1486,7 +1454,7 @@ public class JanelaVendas extends JFrame {
 			trx.rollback();
 			JOptionPane.showMessageDialog(null, "Erro ao dar baixa no estoque!!!");
 		}
-
+		
 	}
 
 	private boolean verificaValorMinimoFormaPagamento(Double valor) {
@@ -1501,15 +1469,13 @@ public class JanelaVendas extends JFrame {
 
 		return retorno;
 	}
+/*
+	private void imprimirComprovante(VendaCabecalho vendaCabecalho) throws JRException {
+		ChamaRelatorioReciboVenda chamaRelatorio = new ChamaRelatorioReciboVenda();
 
-	/*
-	 * private void imprimirComprovante(VendaCabecalho vendaCabecalho) throws
-	 * JRException { ChamaRelatorioReciboVenda chamaRelatorio = new
-	 * ChamaRelatorioReciboVenda();
-	 * 
-	 * chamaRelatorio.report("DetalhesReciboPrimeiraVia.jasper", vendaCabecalho,
-	 * tableProdutos); }
-	 */
+		chamaRelatorio.report("DetalhesReciboPrimeiraVia.jasper", vendaCabecalho, tableProdutos);
+	}
+*/
 	private void buscarCreditoUsuario() {
 
 		try {
@@ -1546,101 +1512,80 @@ public class JanelaVendas extends JFrame {
 
 		}
 	}
-
-	private void imprimirComprovante(VendaCabecalho vc, Cliente c, FormaPagamento f, Usuario u) {
-
-		// #################### INICIO CAPTURANDO ENDEREÇO ###################
+	
+	private void imprimirComprovante(VendaCabecalho vc, Cliente c, FormaPagamento f, Usuario u){
+				
+		//#################### INICIO CAPTURANDO ENDEREÇO ###################
 		EnderecoCliente enderecoCliente = null;
 		try {
 			enderecoCliente = cliente.getEnderecos().get(0);
 		} catch (Exception e2) {
 			enderecoCliente = null;
 		}
-		// #################### FIM CAPTURANDO ENDEREÇO ###################
-
-		// ################## INICIO CAPTURANDO FORMA DE PAGAMENTO
-		// ####################
-		// FormaPagamento f = (FormaPagamento)
-		// cbFormaPagamento.getSelectedItem();
-		// ################## FIM CAPTURANDO FORMA DE PAGAMENTO
-		// ####################
-
-		// ###################### INICIO PEGANDO DATA VENCIMENRTO
-		// ###################
-
+		//#################### FIM CAPTURANDO ENDEREÇO ###################
+		
+		//################## INICIO CAPTURANDO FORMA DE PAGAMENTO ####################
+		//FormaPagamento f = (FormaPagamento) cbFormaPagamento.getSelectedItem();
+		//################## FIM CAPTURANDO FORMA DE PAGAMENTO ####################
+		
+		//###################### INICIO PEGANDO DATA VENCIMENRTO ###################
+		
 		GregorianCalendar gcGregorian = new GregorianCalendar();
 		gcGregorian.setTime(dataAtual());
 
-		gcGregorian.set(GregorianCalendar.DAY_OF_MONTH,
-				gcGregorian.get(GregorianCalendar.DAY_OF_MONTH) + (f.getNumeroDias()));
+		gcGregorian.set(GregorianCalendar.DAY_OF_MONTH, gcGregorian.get(GregorianCalendar.DAY_OF_MONTH) + (f.getNumeroDias()));
 
+		
 		String dtVencimento = format.format(gcGregorian.getTime());
-
-		// ###################### FIM PEGANDO DATA VENCIMENRTO
-		// ###################
-
+		
+		//###################### FIM PEGANDO DATA VENCIMENRTO ###################
+						
 		ChamaRelatorioComprovanteVenda chamaRelatorio = new ChamaRelatorioComprovanteVenda();
-
-		try {
-			// chamaRelatorio.report((Usuario) cbUsuario.getSelectedItem(),
-			// cliente, enderecoCliente, f.getNome(),
-			// format.format(dataAtual()), dtVencimento, vcu.getId().toString(),
-			// vcu.getValorParcial().toString(),
-			// vcu.getValorDesconto().toString(),
-			// vcu.getValorTotal().toString());
-			chamaRelatorio.report(u, c, enderecoCliente, f.getNome(), format.format(dataAtual()), dtVencimento,
-					vc.getId().toString(), vc.getValorParcial(), vc.getValorDesconto(), vc.getValorTotal());
+						
+		try {							
+			
+			//chamaRelatorio.report((Usuario) cbUsuario.getSelectedItem(), cliente, enderecoCliente, f.getNome(), format.format(dataAtual()), dtVencimento, vcu.getId().toString(), vcu.getValorParcial().toString(), vcu.getValorDesconto().toString(), vcu.getValorTotal().toString());
+			chamaRelatorio.report(u, c, enderecoCliente, f.getNome(), format.format(dataAtual()), dtVencimento, vc.getId().toString(), vc.getValorParcial(), vc.getValorDesconto(), vc.getValorTotal());
 		} catch (Exception e1) {
-			JOptionPane.showMessageDialog(null, "Erro ao gerar relatório! " + e1.getMessage());
+			JOptionPane.showMessageDialog(null, "Erro ao gerar relatório! " + e1.getMessage() );
 		}
 	}
-
-	private void imprimirComprovante2Via(VendaCabecalho vc, Cliente c, FormaPagamento f, Usuario u) {
-
-		// #################### INICIO CAPTURANDO ENDEREÇO ###################
+	
+	private void imprimirComprovante2Via(VendaCabecalho vc, Cliente c, FormaPagamento f, Usuario u){
+		
+		//#################### INICIO CAPTURANDO ENDEREÇO ###################
 		EnderecoCliente enderecoCliente = null;
 		try {
 			enderecoCliente = cliente.getEnderecos().get(0);
 		} catch (Exception e2) {
 			enderecoCliente = null;
 		}
-		// #################### FIM CAPTURANDO ENDEREÇO ###################
-
-		// ################## INICIO CAPTURANDO FORMA DE PAGAMENTO
-		// ####################
-		// FormaPagamento f = (FormaPagamento)
-		// cbFormaPagamento.getSelectedItem();
-		// ################## FIM CAPTURANDO FORMA DE PAGAMENTO
-		// ####################
-
-		// ###################### INICIO PEGANDO DATA VENCIMENRTO
-		// ###################
-
+		//#################### FIM CAPTURANDO ENDEREÇO ###################
+		
+		//################## INICIO CAPTURANDO FORMA DE PAGAMENTO ####################
+		//FormaPagamento f = (FormaPagamento) cbFormaPagamento.getSelectedItem();
+		//################## FIM CAPTURANDO FORMA DE PAGAMENTO ####################
+		
+		//###################### INICIO PEGANDO DATA VENCIMENRTO ###################
+		
 		GregorianCalendar gcGregorian = new GregorianCalendar();
 		gcGregorian.setTime(dataAtual());
 
-		gcGregorian.set(GregorianCalendar.DAY_OF_MONTH,
-				gcGregorian.get(GregorianCalendar.DAY_OF_MONTH) + (f.getNumeroDias()));
+		gcGregorian.set(GregorianCalendar.DAY_OF_MONTH, gcGregorian.get(GregorianCalendar.DAY_OF_MONTH) + (f.getNumeroDias()));
 
+		
 		String dtVencimento = format.format(gcGregorian.getTime());
-
-		// ###################### FIM PEGANDO DATA VENCIMENRTO
-		// ###################
-
+		
+		//###################### FIM PEGANDO DATA VENCIMENRTO ###################
+						
 		ChamaRelatorioComprovanteVenda2Via chamaRelatorio = new ChamaRelatorioComprovanteVenda2Via();
-
-		try {
-
-			// chamaRelatorio.report((Usuario) cbUsuario.getSelectedItem(),
-			// cliente, enderecoCliente, f.getNome(),
-			// format.format(dataAtual()), dtVencimento, vcu.getId().toString(),
-			// vcu.getValorParcial().toString(),
-			// vcu.getValorDesconto().toString(),
-			// vcu.getValorTotal().toString());
-			chamaRelatorio.report(u, c, enderecoCliente, f.getNome(), format.format(dataAtual()), dtVencimento,
-					vc.getId().toString(), vc.getValorParcial(), vc.getValorDesconto(), vc.getValorTotal());
+						
+		try {							
+			
+			//chamaRelatorio.report((Usuario) cbUsuario.getSelectedItem(), cliente, enderecoCliente, f.getNome(), format.format(dataAtual()), dtVencimento, vcu.getId().toString(), vcu.getValorParcial().toString(), vcu.getValorDesconto().toString(), vcu.getValorTotal().toString());
+			chamaRelatorio.report(u, c, enderecoCliente, f.getNome(), format.format(dataAtual()), dtVencimento, vc.getId().toString(), vc.getValorParcial(), vc.getValorDesconto(), vc.getValorTotal());
 		} catch (Exception e1) {
-			JOptionPane.showMessageDialog(null, "Erro ao gerar relatório! " + e1.getMessage());
+			JOptionPane.showMessageDialog(null, "Erro ao gerar relatório! " + e1.getMessage() );
 		}
 	}
 }
