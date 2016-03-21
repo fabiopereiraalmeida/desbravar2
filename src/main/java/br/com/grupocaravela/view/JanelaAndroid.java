@@ -48,6 +48,7 @@ import br.com.grupocaravela.objeto.AndroidContaReceber;
 import br.com.grupocaravela.objeto.AndroidVendaCabecalho;
 import br.com.grupocaravela.objeto.AndroidVendaDetalhe;
 import br.com.grupocaravela.objeto.Caixa;
+import br.com.grupocaravela.objeto.Cargo;
 import br.com.grupocaravela.objeto.Cliente;
 import br.com.grupocaravela.objeto.ContaReceber;
 import br.com.grupocaravela.objeto.EnderecoCliente;
@@ -63,6 +64,7 @@ import br.com.grupocaravela.tablemodel.TableModelAndroidCaixa;
 import br.com.grupocaravela.tablemodel.TableModelAndroidContasReceber;
 import br.com.grupocaravela.tablemodel.TableModelAndroidVendaCabecalho;
 import br.com.grupocaravela.tablemodel.TableModelListaVendasAndroid;
+import br.com.grupocaravela.util.UsuarioLogado;
 
 public class JanelaAndroid extends JFrame {
 
@@ -88,6 +90,8 @@ public class JanelaAndroid extends JFrame {
 
 	private AndroidVendaCabecalho androidVendaCabecalho;
 	private AndroidVendaDetalhe androidVendaDetalhe;
+	
+	private AndroidContaReceber androidContaReceber;
 
 	// private SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
 	private SimpleDateFormat formatDataHoraInternacional = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -108,6 +112,10 @@ public class JanelaAndroid extends JFrame {
 	private JDateChooser dcInicialRecebidas;
 	private JDateChooser dcFinalRecebidas;
 	private JCheckBox cbMostrarTodasContas;
+	
+	private Cargo cargo = UsuarioLogado.getUsuario().getCargo();
+	private JButton btnExcluir2;
+	private JButton btnExcluir;
 
 	/**
 	 * Launch the application.
@@ -353,7 +361,8 @@ public class JanelaAndroid extends JFrame {
 		btnImprimirComprovante.setIcon(
 				new ImageIcon(JanelaAndroid.class.getResource("/br/com/grupocaravela/icones/impressora_24.png")));
 
-		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir = new JButton("Excluir");
+		btnExcluir.setEnabled(false);
 		btnExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -982,20 +991,58 @@ public class JanelaAndroid extends JFrame {
 
 		tfTotalContasRecebidas = new JLabel("R$ 0.0");
 		tfTotalContasRecebidas.setFont(new Font("Dialog", Font.BOLD, 16));
+		
+		btnExcluir2 = new JButton("Excluir");
+		btnExcluir2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				androidContaReceber = tableModelAndroidContasReceber
+						.getAndroidContaReceber(tableContasRecebidas.getSelectedRow());
+
+				Object[] options = { "Sim", "Não" };
+				int i = JOptionPane.showOptionDialog(null, "ATENÇÃO!!! Confirma a Exclusão da conta recebida?", "Exclusão",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+				if (i == JOptionPane.YES_OPTION) {
+
+					excluirContaReceberAndroid(androidContaReceber);
+					
+					limparTabelaRecebidas();
+				}
+				
+			}
+		});
+		btnExcluir2.setEnabled(false);
+		btnExcluir2.setIcon(new ImageIcon(JanelaAndroid.class.getResource("/br/com/grupocaravela/icones/alerta_vermelho_24.png")));
 		GroupLayout gl_panel_16 = new GroupLayout(panel_16);
-		gl_panel_16
-				.setHorizontalGroup(gl_panel_16.createParallelGroup(Alignment.TRAILING).addGap(0, 759, Short.MAX_VALUE)
-						.addGroup(gl_panel_16.createSequentialGroup().addContainerGap().addComponent(button_1)
-								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(button_2)
-								.addPreferredGap(ComponentPlacement.RELATED, 274, Short.MAX_VALUE).addComponent(label_6)
-								.addGap(18).addComponent(tfTotalContasRecebidas).addContainerGap()));
-		gl_panel_16
-				.setVerticalGroup(gl_panel_16.createParallelGroup(Alignment.TRAILING).addGap(0, 57, Short.MAX_VALUE)
-						.addGroup(gl_panel_16.createSequentialGroup().addContainerGap()
-								.addGroup(gl_panel_16.createParallelGroup(Alignment.BASELINE)
-										.addComponent(tfTotalContasRecebidas).addComponent(label_6)
-										.addComponent(button_1).addComponent(button_2))
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		gl_panel_16.setHorizontalGroup(
+			gl_panel_16.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_16.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(button_1)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(button_2)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnExcluir2, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
+					.addComponent(label_6)
+					.addGap(18)
+					.addComponent(tfTotalContasRecebidas)
+					.addContainerGap())
+		);
+		gl_panel_16.setVerticalGroup(
+			gl_panel_16.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_16.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_16.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_16.createParallelGroup(Alignment.BASELINE)
+							.addComponent(tfTotalContasRecebidas)
+							.addComponent(label_6)
+							.addComponent(button_1)
+							.addComponent(button_2))
+						.addComponent(btnExcluir2, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
 		panel_16.setLayout(gl_panel_16);
 
 		cbMostrarTodasContas = new JCheckBox("Mostrar todas contas recebidas");
@@ -1057,7 +1104,7 @@ public class JanelaAndroid extends JFrame {
 		numeroMoeda.setMinimumFractionDigits(2);
 		DefaultTableCellRenderer cellRendererCustomMoeda = new MoedaRender(numeroMoeda);
 
-		tableVendaAndroid.getColumnModel().getColumn(2).setCellRenderer(cellRendererCustomMoeda);
+		tableVendaAndroid.getColumnModel().getColumn(3).setCellRenderer(cellRendererCustomMoeda);
 
 		tableItensVenda.getColumnModel().getColumn(2).setCellRenderer(cellRendererCustomMoeda);
 		tableItensVenda.getColumnModel().getColumn(4).setCellRenderer(cellRendererCustomMoeda);
@@ -1263,7 +1310,7 @@ public class JanelaAndroid extends JFrame {
 		try {
 
 			Query consulta = manager
-					.createQuery("from AndroidContaReceber where ativo = '1' AND dataRecebimento BETWEEN '" + dataInical
+					.createQuery("from AndroidContaReceber where ativo = '1' AND dataTransmissao BETWEEN '" + dataInical
 							+ "' AND '" + dataFinal + "' " + "AND usuario_id like '" + usuario.getId() + "'");
 			List<AndroidContaReceber> listaAndroidContaReceber = consulta.getResultList();
 			// trx.commit();
@@ -1291,7 +1338,7 @@ public class JanelaAndroid extends JFrame {
 
 		try {
 
-			Query consulta = manager.createQuery("from AndroidContaReceber where dataRecebimento BETWEEN '" + dataInical
+			Query consulta = manager.createQuery("from AndroidContaReceber where dataTransmissao BETWEEN '" + dataInical
 					+ "' AND '" + dataFinal + "' " + "AND usuario_id like '" + usuario.getId() + "'");
 			List<AndroidContaReceber> listaAndroidContaReceber = consulta.getResultList();
 			// trx.commit();
@@ -1318,7 +1365,7 @@ public class JanelaAndroid extends JFrame {
 		try {
 			// trx.begin();
 			Query consulta = manager.createQuery("from AndroidVendaCabecalho where data_venda BETWEEN '" + dataInical
-					+ "' AND '" + dataFinal + "' " + "AND usuario_id like '" + usuario.getId() + "' AND ativo = 1");
+					+ "' AND '" + dataFinal + "' " + "AND usuario_id like '" + usuario.getId() + "' AND venda_aprovada = '0'");
 			List<AndroidVendaCabecalho> listaAndroidVendaCabecalho = consulta.getResultList();
 			// trx.commit();
 
@@ -1385,7 +1432,7 @@ public class JanelaAndroid extends JFrame {
 		try {
 
 			// trx.begin();
-			Query consulta = manager.createQuery("from Usuario");
+			Query consulta = manager.createQuery("from Usuario ORDER BY nome ASC");
 			List<Usuario> listaUsuarios = consulta.getResultList();
 			// trx.commit();
 
@@ -1425,7 +1472,7 @@ public class JanelaAndroid extends JFrame {
 		try {
 
 			trx.begin();
-			Query consulta = manager.createQuery("from FormaPagamento");
+			Query consulta = manager.createQuery("from FormaPagamento ORDER BY nome ASC");
 			List<FormaPagamento> listaFormaPagamento = consulta.getResultList();
 			trx.commit();
 
@@ -1993,6 +2040,26 @@ public class JanelaAndroid extends JFrame {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
 	}
+	
+	private void excluirContaReceberAndroid(AndroidContaReceber acr) {
+		try {
+
+			Query consulta = manager.createQuery(
+					"from AndroidContaReceber where id like '" + acr.getId() + "'");
+			List<AndroidContaReceber> listaAndroidContaReceber = consulta.getResultList();
+			// trx.commit();
+			
+			AndroidContaReceber a = listaAndroidContaReceber.get(0);
+			
+			trx.begin();
+			manager.remove(a);
+			trx.commit();
+
+			JOptionPane.showMessageDialog(null, "A Conta Recebida foi removida com sucesso!");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "ERRO! " + e);
+		}
+	}
 
 	private void imprimirComprovante(VendaCabecalho vc, Cliente c, FormaPagamento f, Usuario u) {
 
@@ -2219,5 +2286,17 @@ public class JanelaAndroid extends JFrame {
 		//	JOptionPane.showMessageDialog(null, "Erro ao verificar quantidade em estoque no estoque!!! " + e);
 		//}
 		return retorno;
+	}
+	
+private void permicoes(){
+				
+		if (cargo.isAcessoContasReceber()) {
+			btnExcluir2.setEnabled(true);
+		}
+		
+		if (cargo.isAcessoVendas()) {
+			btnExcluir.setEnabled(true);
+		}
+		
 	}
 }

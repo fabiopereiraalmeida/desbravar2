@@ -120,6 +120,8 @@ public class JanelaContasReceber extends JFrame {
 		carregarTableModel();
 		iniciaConexao();
 		tamanhoColunas();
+		
+		tfLocalizar.requestFocus();
 /*
 		// Evento ao fechar a janela
 		addWindowListener(new WindowAdapter() {
@@ -150,10 +152,11 @@ public class JanelaContasReceber extends JFrame {
 
 		table.getColumnModel().getColumn(4).setCellRenderer(cellRendererCustomMoeda);
 
-		tableItens.getColumnModel().getColumn(2).setCellRenderer(cellRendererCustomMoeda);
+		//tableItens.getColumnModel().getColumn(2).setCellRenderer(cellRendererCustomMoeda);
 		tableItens.getColumnModel().getColumn(4).setCellRenderer(cellRendererCustomMoeda);
 		tableItens.getColumnModel().getColumn(5).setCellRenderer(cellRendererCustomMoeda);
 		tableItens.getColumnModel().getColumn(6).setCellRenderer(cellRendererCustomMoeda);
+		tableItens.getColumnModel().getColumn(7).setCellRenderer(cellRendererCustomMoeda);
 
 	}
 

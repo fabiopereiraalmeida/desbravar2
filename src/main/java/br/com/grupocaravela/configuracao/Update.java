@@ -259,20 +259,23 @@ public class Update {
 
 			JOptionPane.showMessageDialog(null,
 					"Versão atualizada com sucesso! - Versão atual - " + lerArquivoVersao());
-			JOptionPane.showMessageDialog(null, "Aguarde a abertura/reinicio do sistema!!!");
-
+			JOptionPane.showMessageDialog(null, "Favor abrir o sistema novamente!");
+			
+			System.exit(0);
+/*
 			try {
 				if ("Linux".equals(sistema)) {
 					Runtime.getRuntime().exec("java -jar /opt/GrupoCaravela/software/sistema/Desbravar2.jar");
 				} else {
 					Runtime.getRuntime().exec("java -jar c:\\GrupoCaravela\\software\\sistema\\Desbravar2.jar");
 				}
-				System.exit(0);
+
+				
 
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "ERRO! Erro ao atualizar o sistema! Procurar o suporte Tecnico!!!");
 			}
-
+*/
 		} catch (Exception exception) {
 			exception.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Não foi possivel estabelecer conexão com o servidor!!!");
@@ -356,6 +359,7 @@ public class Update {
 				} catch (InterruptedException ex) {
 					Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
 				}
+				
 				atualizar();
 
 			}
@@ -369,6 +373,7 @@ public class Update {
 				espera.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 				espera.setUndecorated(true);
 				espera.setVisible(true);
+				espera.setAlwaysOnTop(true);
 				espera.setLocationRelativeTo(null);
 				try {
 					tr.join();

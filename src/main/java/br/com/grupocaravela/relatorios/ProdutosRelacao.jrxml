@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
-<!-- 2016-03-08T12:26:16 -->
+<!-- 2016-03-18T12:56:42 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProdutosRelacao" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eac7f807-b02f-449c-a7c4-d91bf689bd81">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -68,9 +68,9 @@ ORDER BY desbravar.produto.nome ASC]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="36" splitType="Stretch">
+		<band height="22" splitType="Stretch">
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="b862e2eb-eaf9-476e-9db5-57ed083f99e6"/>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="b862e2eb-eaf9-476e-9db5-57ed083f99e6"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
@@ -113,57 +113,57 @@ ORDER BY desbravar.produto.nome ASC]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="6" splitType="Stretch">
+		<band height="19" splitType="Stretch">
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="2" width="555" height="1" uuid="39f48c34-b6ee-47f7-8876-c3aaee1eb021"/>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="17" width="555" height="1" uuid="39f48c34-b6ee-47f7-8876-c3aaee1eb021"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement style="Detail" x="0" y="-16" width="50" height="15" uuid="d84e7f8b-7072-4ae7-b135-347fb325fce1"/>
+				<reportElement style="Detail" x="0" y="1" width="50" height="15" uuid="d84e7f8b-7072-4ae7-b135-347fb325fce1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="50" y="-16" width="90" height="15" uuid="b0a90a40-d4b4-44c0-bd0d-2d42abd6db27"/>
+				<reportElement style="Detail" x="50" y="1" width="90" height="15" uuid="b0a90a40-d4b4-44c0-bd0d-2d42abd6db27"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="140" y="-16" width="160" height="15" uuid="26dcdd6d-11b3-473c-972e-e083c6f8ec2c"/>
+				<reportElement style="Detail" x="140" y="1" width="160" height="15" uuid="26dcdd6d-11b3-473c-972e-e083c6f8ec2c"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="300" y="-16" width="59" height="15" uuid="fc33d380-2d71-4608-8c2a-0ddee2e25771"/>
+				<reportElement style="Detail" x="300" y="1" width="59" height="15" uuid="fc33d380-2d71-4608-8c2a-0ddee2e25771"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{quantidade_estoque}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00;¤ -#,##0.00">
-				<reportElement style="Detail" x="360" y="-16" width="72" height="15" uuid="6076d655-acb6-44bb-ae17-76fac2e81dad"/>
+				<reportElement style="Detail" x="360" y="1" width="72" height="15" uuid="6076d655-acb6-44bb-ae17-76fac2e81dad"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valor_desejavel_venda}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="433" y="-16" width="40" height="15" uuid="d6a9ca3b-c11e-4282-9fba-ccef7b38a4d6"/>
+				<reportElement style="Detail" x="433" y="1" width="40" height="15" uuid="d6a9ca3b-c11e-4282-9fba-ccef7b38a4d6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{COLUMN_6}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="474" y="-16" width="79" height="15" uuid="244f6d79-6324-4276-9ea0-4e6852f061c2"/>
+				<reportElement style="Detail" x="474" y="1" width="79" height="15" uuid="244f6d79-6324-4276-9ea0-4e6852f061c2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>

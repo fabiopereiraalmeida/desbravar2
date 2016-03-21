@@ -14,6 +14,7 @@ import br.com.grupocaravela.configuracao.EntityManagerProducer;
 import br.com.grupocaravela.objeto.AndroidVendaCabecalho;
 import br.com.grupocaravela.objeto.Cliente;
 import br.com.grupocaravela.objeto.FormaPagamento;
+import br.com.grupocaravela.objeto.Usuario;
 
 public class TableModelAndroidVendaCabecalho extends AbstractTableModel{
 
@@ -27,7 +28,7 @@ public class TableModelAndroidVendaCabecalho extends AbstractTableModel{
 
 	private ArrayList<AndroidVendaCabecalho> listaAndroidVendaCabecalho;
     //Titulo das colunas
-    private String[] colunas = {"Id", "Cliente", "Valor", "Data Venda", "Forma Pagamento"};
+    private String[] colunas = {"Id", "Cliente", "Vendedor", "Valor", "Data Venda", "Forma Pagamento"};
     
     //Construtor
     public TableModelAndroidVendaCabecalho(){
@@ -75,19 +76,22 @@ public class TableModelAndroidVendaCabecalho extends AbstractTableModel{
                 return buscarRazaoSocial(this.listaAndroidVendaCabecalho.get(rowIndex).getCliente());
             	
             case 2:
+            	return buscarNomeUsuario(this.listaAndroidVendaCabecalho.get(rowIndex).getUsuario());
+                
+            case 3:
                 return this.listaAndroidVendaCabecalho.get(rowIndex).getValorTotal();
                             
-            case 3:
+            case 4:
             	
             	//return "";
             	
             	try {
-            		return formatDataHora.format(this.listaAndroidVendaCabecalho.get(rowIndex).getDataVenda());
+            		return formatData.format(this.listaAndroidVendaCabecalho.get(rowIndex).getDataVenda());
 				} catch (Exception e) {
 					return this.listaAndroidVendaCabecalho.get(rowIndex).getDataVenda();
 				}
                                            
-            case 4:
+            case 5:
                 //return this.listaAndroidVendaCabecalho.get(rowIndex).getFormaPagamento().getNome();
             	return buscarFormaPagamento(this.listaAndroidVendaCabecalho.get(rowIndex).getFormaPagamento());
             /*    
@@ -126,6 +130,26 @@ public class TableModelAndroidVendaCabecalho extends AbstractTableModel{
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao buscar a razão social clientes: " + e);
+			retorno = null;
+		}
+		
+		return retorno;
+	}
+    
+    private String buscarNomeUsuario(Long id) {
+    	String retorno = null;
+		try {
+			//trx.begin();
+			Query consulta = manager.createQuery("from Usuario where id like '" + id + "'" );
+			List<Usuario> listaUsuarios = consulta.getResultList();
+			//trx.commit();
+
+			for (int i = 0; i < listaUsuarios.size(); i++) {
+				Usuario u = listaUsuarios.get(i);
+				retorno = u.getNome();
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro ao buscar o nome do usuario: " + e);
 			retorno = null;
 		}
 		
