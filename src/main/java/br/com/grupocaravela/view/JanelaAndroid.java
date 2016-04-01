@@ -152,6 +152,7 @@ public class JanelaAndroid extends JFrame {
 		buscarContaReceberSemFiltro();
 
 		ativarFiltroBusca(false);
+		permicoes();
 
 		/*
 		 * // Evento ao fechar a janela addWindowListener(new WindowAdapter() {

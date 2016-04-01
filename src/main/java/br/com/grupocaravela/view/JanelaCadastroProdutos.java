@@ -680,15 +680,14 @@ public class JanelaCadastroProdutos extends JFrame {
 		DefaultTableCellRenderer cellRendererCustomMoeda = new MoedaRender(numeroMoeda);
 		tableLista.getColumnModel().getColumn(3).setCellRenderer(cellRendererCustomMoeda);
 
-	}
-		
+	}		
 
 	private void carregarTabela() {
 				
 		try {
 
 			//trx.begin();
-			Query consulta = manager.createQuery("from Produto where ativo = '1'");
+			Query consulta = manager.createQuery("from Produto where ativo = '1' ORDER BY nome ASC");
 			List<Produto> listaProdutos = consulta.getResultList();
 			//trx.commit();
 
@@ -888,7 +887,7 @@ public class JanelaCadastroProdutos extends JFrame {
 			try {
 
 				//trx.begin();
-				Query consulta = manager.createQuery("from Produto where nome like '%" + tfLocalizar.getText() + "%' and ativo = '1'");
+				Query consulta = manager.createQuery("from Produto where nome like '%" + tfLocalizar.getText() + "%' and ativo = '1' ORDER BY nome ASC");
 				List<Produto> listaProdutos = consulta.getResultList();
 				//trx.commit();
 
@@ -906,7 +905,7 @@ public class JanelaCadastroProdutos extends JFrame {
 
 				//trx.begin();
 				Query consulta = manager
-						.createQuery("from Produto where codigo like '%" + tfLocalizar.getText() + "%' and ativo = '1'");
+						.createQuery("from Produto where codigo like '%" + tfLocalizar.getText() + "%' and ativo = '1' ORDER BY nome ASC");
 				List<Produto> listaProdutos = consulta.getResultList();
 				//trx.commit();
 
