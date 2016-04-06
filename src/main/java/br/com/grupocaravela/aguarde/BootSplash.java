@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 
 public class BootSplash extends JFrame {
-
+//teste
 	private JPanel contentPane;
 
 	/**
