@@ -20,10 +20,9 @@ public class CompraDetalhe implements Serializable {
 
 	private Long id;
 	private Produto produto;
-	private Double quantidade;
-	private Double desconto;
 	private Double valorTotal;
 	private CompraCabecalho compraCabecalho;
+	private ProdutoLote produtoLote;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -44,24 +43,6 @@ public class CompraDetalhe implements Serializable {
 		this.produto = produto;
 	}
 
-	@Column(length = 11, scale = 3)
-	public Double getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Double quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	@Column(length = 11, scale = 3)
-	public Double getDesconto() {
-		return desconto;
-	}
-
-	public void setDesconto(Double desconto) {
-		this.desconto = desconto;
-	}
-
 	@Column(name = "valor_total", precision = 11, scale = 3)
 	public Double getValorTotal() {
 		return valorTotal;
@@ -79,6 +60,16 @@ public class CompraDetalhe implements Serializable {
 
 	public void setCompraCabecalho(CompraCabecalho compraCabecalho) {
 		this.compraCabecalho = compraCabecalho;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name = "produto_lote_id")
+	public ProdutoLote getProdutoLote() {
+		return produtoLote;
+	}
+
+	public void setProdutoLote(ProdutoLote produtoLote) {
+		this.produtoLote = produtoLote;
 	}
 
 	@Override

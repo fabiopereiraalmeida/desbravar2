@@ -18,16 +18,16 @@ public class Desbravar {
 				final Thread tr = new Thread(new Runnable() {
 					@Override
 					public void run() {
-						try {
+						//try {
 							
 							JanelaLogin loginView = new JanelaLogin();
 							loginView.setVisible(true);
 							loginView.setLocationRelativeTo(null);
 							
-						} catch (Exception ex) {
+						//} catch (Exception ex) {
 							
-							JOptionPane.showMessageDialog(null, "Erro na tentativa de conexão com o servidor!!! Verifique a conexão!");
-						}
+						//	JOptionPane.showMessageDialog(null, "Erro na tentativa de conexão com o servidor!!! Verifique a conexão!");
+						//}
 						
 					}
 				});

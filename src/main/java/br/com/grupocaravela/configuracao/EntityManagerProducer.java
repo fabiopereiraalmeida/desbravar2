@@ -26,15 +26,17 @@ public class EntityManagerProducer {
 			
 	public EntityManagerProducer() {
 		
-		try {
+		//try {
 			
 			Map<String, String> properties = new HashMap<String, String>();
 			properties.put("javax.persistence.jdbc.url", "jdbc:mysql://" + lerArquivoXml() +"/desbravar");
+			
 			properties.put("javax.persistence.jdbc.user", "root");
 			properties.put("javax.persistence.jdbc.password", "peperoni");
 			
 			factory = Persistence.createEntityManagerFactory("DesbravarPU", properties);
 			servidorLocal = true;
+			/*
 		} catch (Exception e) {
 			
 			Object[] options = { "Sim", "Não" };
@@ -47,31 +49,13 @@ public class EntityManagerProducer {
 				chamaConfigurar();
 				
 			}
+						
 			
-			
-			/*
-			
-			Object[] options = { "Sim", "Não" };
-			int i = JOptionPane.showOptionDialog(null,
-					"ATENÇÃO!!! Não foi encontrado um servidor local. Gostaria de conectar ao servidor usando a internet?", "Conexão",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
-			if (i == JOptionPane.YES_OPTION) {
-			
-			JOptionPane.showMessageDialog(null,
-					"ATENÇÃO! Você esta realizando um acesso via Internet, isso acarretara em uma conexão lenta!!!");
-			factory = Persistence.createEntityManagerFactory("DesbravarPU_WAN");
-			servidorLocal = false;
-			
-			} else {
-				
-				JOptionPane.showMessageDialog(null,
-						"ATENÇÃO! Servidor não encontrado!!!");
-			}
-		*/	
 		}		
+		*/
 				
-	}
+	} 
+
 	
 	public static EntityManager createEntityManager() {
 		return factory.createEntityManager();

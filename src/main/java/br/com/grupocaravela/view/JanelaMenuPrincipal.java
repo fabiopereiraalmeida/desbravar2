@@ -1170,6 +1170,52 @@ public class JanelaMenuPrincipal extends JFrame {
 		panel_3.add(btnProdutos);
 
 		btnCompras = new JButton("Compras");
+		btnCompras.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// #############################################
+				final Thread tr = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							TimeUnit.SECONDS.sleep(0);
+						} catch (InterruptedException ex) {
+							Logger.getLogger(JanelaMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+						}
+						// ######################METODO A SER
+						// EXECUTADO##############################
+						JanelaCompras janelaCompras = new JanelaCompras();
+						janelaCompras.setVisible(true);
+						janelaCompras.setLocationRelativeTo(null);
+						// ######################FIM METODO A SER
+						// EXECUTADO##############################
+					}
+				});
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						tr.start();
+						// .....
+						EsperaJanela espera = new EsperaJanela();
+						espera.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+						espera.setUndecorated(true);
+						espera.setVisible(true);
+						espera.setLocationRelativeTo(null);
+						try {
+							tr.join();
+							espera.dispose();
+
+						} catch (InterruptedException ex) {
+							// Logger.getLogger(MenuView.class.getName()).log(Level.SEVERE,
+							// null, ex);
+						}
+					}
+				}).start();
+
+				// ###############################################
+				
+			}
+		});
 		btnCompras.setEnabled(false);
 		btnCompras.setIcon(
 				new ImageIcon(JanelaMenuPrincipal.class.getResource("/br/com/grupocaravela/icones/compras_64.png")));

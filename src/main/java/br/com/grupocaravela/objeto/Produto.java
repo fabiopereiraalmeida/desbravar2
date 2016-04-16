@@ -1,7 +1,10 @@
 package br.com.grupocaravela.objeto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -33,6 +36,7 @@ public class Produto implements Serializable {
 	private Unidade unidade;
 	private Categoria categoria;
 	private Boolean ativo;
+	private List<ProdutoLote> produtoLote = new ArrayList<>();
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -169,6 +173,15 @@ public class Produto implements Serializable {
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+	
+	@OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
+	public List<ProdutoLote> getProdutoLote() {
+		return produtoLote;
+	}
+
+	public void setProdutoLote(List<ProdutoLote> produtoLote) {
+		this.produtoLote = produtoLote;
 	}
 
 	@Override

@@ -1,8 +1,11 @@
 package br.com.grupocaravela.objeto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -31,9 +35,10 @@ public class CompraCabecalho implements Serializable {
 	private Fornecedor fornecedor;
 	private Double valorCompra;
 	private Boolean finalizada;
-	private Boolean entrege;
+	private Boolean entregue;
 	private String numeroNota;
 	private FormaPagamento formaPagamento;
+	private List<CompraDetalhe> compraDetalhes = new ArrayList<>();
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -100,12 +105,12 @@ public class CompraCabecalho implements Serializable {
 		this.finalizada = finalizada;
 	}
 
-	public Boolean getEntrege() {
-		return entrege;
+	public Boolean getEntregue() {
+		return entregue;
 	}
 
-	public void setEntrege(Boolean entrege) {
-		this.entrege = entrege;
+	public void setEntregue(Boolean entregue) {
+		this.entregue = entregue;
 	}
 
 	@Column(name = "numero_nota", length = 20)
@@ -125,6 +130,15 @@ public class CompraCabecalho implements Serializable {
 
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
 		this.formaPagamento = formaPagamento;
+	}
+	
+	@OneToMany(mappedBy = "compraCabecalho", cascade = CascadeType.ALL, orphanRemoval = true)
+	public List<CompraDetalhe> getCompraDetalhes() {
+		return compraDetalhes;
+	}
+
+	public void setCompraDetalhes(List<CompraDetalhe> compraDetalhes) {
+		this.compraDetalhes = compraDetalhes;
 	}
 
 	@Override
