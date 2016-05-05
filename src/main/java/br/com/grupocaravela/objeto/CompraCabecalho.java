@@ -37,7 +37,7 @@ public class CompraCabecalho implements Serializable {
 	private Boolean finalizada;
 	private Boolean entregue;
 	private String numeroNota;
-	private FormaPagamento formaPagamento;
+	//private FormaPagamento formaPagamento;
 	private List<CompraDetalhe> compraDetalhes = new ArrayList<>();
 
 	@Id
@@ -121,7 +121,7 @@ public class CompraCabecalho implements Serializable {
 	public void setNumeroNota(String numeroNota) {
 		this.numeroNota = numeroNota;
 	}
-
+/*
 	@ManyToOne
 	@JoinColumn(name = "forma_pagamento_id", nullable = false)
 	public FormaPagamento getFormaPagamento() {
@@ -131,7 +131,7 @@ public class CompraCabecalho implements Serializable {
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
 		this.formaPagamento = formaPagamento;
 	}
-	
+*/	
 	@OneToMany(mappedBy = "compraCabecalho", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<CompraDetalhe> getCompraDetalhes() {
 		return compraDetalhes;

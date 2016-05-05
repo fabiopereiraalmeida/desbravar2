@@ -26,9 +26,10 @@ public class ContaPagar implements Serializable {
 	private Date dataVencimento;
 	private Date dataCriacao;
 	private Date dataPagamento;
-	private FormaPagamento formaPagamento;
+	//private FormaPagamento formaPagamento;
 	private Double valor;
 	private String observacao;
+	private boolean pago;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -88,7 +89,7 @@ public class ContaPagar implements Serializable {
 	public void setDataPagamento(Date dataPagamento) {
 		this.dataPagamento = dataPagamento;
 	}
-
+/*
 	@ManyToOne
 	@JoinColumn(name = "forma_pagamento_id", nullable = false)
 	public FormaPagamento getFormaPagamento() {
@@ -98,7 +99,7 @@ public class ContaPagar implements Serializable {
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
 		this.formaPagamento = formaPagamento;
 	}
-
+*/
 	@Column(precision = 11, scale = 2)
 	public Double getValor() {
 		return valor;
@@ -115,6 +116,14 @@ public class ContaPagar implements Serializable {
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+	
+	public boolean getPago() {
+		return pago;
+	}
+
+	public void setPago(boolean pago) {
+		this.pago = pago;
 	}
 
 	@Override

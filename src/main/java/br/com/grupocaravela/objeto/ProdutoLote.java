@@ -31,7 +31,7 @@ public class ProdutoLote implements Serializable {
 	private Double quantidade;
 	private Double valorCompra;
 	private Produto Produto;
-	private List<CompraDetalhe> compraDetalhe = new ArrayList<>();
+	//private List<CompraDetalhe> compraDetalhe = new ArrayList<>();
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -99,7 +99,7 @@ public class ProdutoLote implements Serializable {
 	public void setProduto(Produto produto) {
 		Produto = produto;
 	}
-	
+/*	
 	@OneToMany(mappedBy = "produtoLote", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<CompraDetalhe> getCompraDetalhe() {
 		return compraDetalhe;
@@ -108,7 +108,7 @@ public class ProdutoLote implements Serializable {
 	public void setCompraDetalhe(List<CompraDetalhe> compraDetalhe) {
 		this.compraDetalhe = compraDetalhe;
 	}
-
+*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;
