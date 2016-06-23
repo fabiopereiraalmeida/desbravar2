@@ -5,8 +5,6 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.grupocaravela.configuracao.Empresa;
-import br.com.grupocaravela.objeto.VendaCabecalho;
 import br.com.grupocaravela.util.ConectaBanco;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -28,7 +26,7 @@ public class ChamaRelatorio {
 
 	        Map map = new HashMap<>();
 	        
-	        map.put("IP_SERVIDOR", Empresa.getIpServidor());
+	        //map.put("IP_SERVIDOR", Empresa.getIpServidor());
 
 	        URL arquivo = getClass().getResource(endereco);
 	        jasper = (JasperReport) JRLoader.loadObject(arquivo);

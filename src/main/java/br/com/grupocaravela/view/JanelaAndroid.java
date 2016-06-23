@@ -64,6 +64,7 @@ import br.com.grupocaravela.tablemodel.TableModelAndroidCaixa;
 import br.com.grupocaravela.tablemodel.TableModelAndroidContasReceber;
 import br.com.grupocaravela.tablemodel.TableModelAndroidVendaCabecalho;
 import br.com.grupocaravela.tablemodel.TableModelListaVendasAndroid;
+import br.com.grupocaravela.util.CriarHistorico;
 import br.com.grupocaravela.util.UsuarioLogado;
 
 public class JanelaAndroid extends JFrame {
@@ -778,6 +779,8 @@ public class JanelaAndroid extends JFrame {
 					trx.begin();
 					manager.persist(androidVendaCabecalho);
 					trx.commit();
+					
+					CriarHistorico.criar(UsuarioLogado.getUsuario(), "A venda android com id nº " + androidVendaCabecalho.getId() + " do cliente id nº " + androidVendaCabecalho.getCliente() + " no valor de R$ " + androidVendaCabecalho.getValorTotal() + " foi salva", dataAtual());
 
 					tabbedPane.setSelectedIndex(0);
 					tabbedPane.setEnabledAt(1, false);
@@ -936,7 +939,7 @@ public class JanelaAndroid extends JFrame {
 
 						receberNota(acr, cr);
 						
-						criarCaixaDoCaixa(listaAndroidContaReceber.get(i).getValorDevido(), dataAtual(), cr.getVendaCabecalho()); // Criar Caixa
+						criarCaixaDoCaixa(acr.getValorDevido(), dataAtual(), cr.getVendaCabecalho(), buscarUsuario(acr.getUsuario())); // Criar Caixa
 						
 						// } catch (Exception e2) {
 						// JOptionPane.showMessageDialog(null, "ERRO!!");
@@ -984,6 +987,10 @@ public class JanelaAndroid extends JFrame {
 		button_1.setIcon(new ImageIcon(JanelaAndroid.class.getResource("/br/com/grupocaravela/icones/aprovar_24.png")));
 
 		JButton button_2 = new JButton("Relatório");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		button_2.setIcon(
 				new ImageIcon(JanelaAndroid.class.getResource("/br/com/grupocaravela/icones/impressora_24.png")));
 
@@ -1814,6 +1821,8 @@ public class JanelaAndroid extends JFrame {
 			manager.persist(vc);
 			manager.persist(androidVendaCabecalho);
 			trx.commit();
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A venda via Android com o id nº " + avc.getId() + " do vendedor " + avc.getUsuario().toString() + " foi aprovada", dataAtual());
 
 			criarVendasDetalhes(avc, vc);
 
@@ -1835,7 +1844,7 @@ public class JanelaAndroid extends JFrame {
 			if (formaPagamento.getNumeroDias() > 0) {
 				criarContaReceber(cliente, vc, avc.getValorTotal());
 			} else {
-				criarCaixa(vc);
+				criarCaixa(vc, usuario);
 			}
 
 			baixaEstoque(vc);
@@ -1847,7 +1856,7 @@ public class JanelaAndroid extends JFrame {
 		}
 	}
 
-	private void criarCaixa(VendaCabecalho vc) {
+	private void criarCaixa(VendaCabecalho vc, Usuario u) {
 
 		try {
 			Caixa caixa = new Caixa();
@@ -1855,17 +1864,21 @@ public class JanelaAndroid extends JFrame {
 			caixa.setData(dataAtual());
 			caixa.setValor(vc.getValorTotal());
 			caixa.setVendaCabecalho(vc);
+			caixa.setUsuario(u);
 
 			trx.begin();
 			manager.persist(caixa);
 			trx.commit();
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "O caixa no valor de R$ " + vc.getValorTotal() + " do vendedor " + vc.getUsuario().getNome() + " referente a venda com id nº " + vc.getId() + " foi criado", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao cria caixa!" + e);
 		}
 
 	}
 
-	private void criarCaixaDoCaixa(Double valor, Date data, VendaCabecalho vendaCabecalho) {
+	private void criarCaixaDoCaixa(Double valor, Date data, VendaCabecalho vendaCabecalho, Usuario u) {
 
 		try {
 			Caixa caixa = new Caixa();
@@ -1873,19 +1886,22 @@ public class JanelaAndroid extends JFrame {
 			caixa.setData(data);
 			caixa.setValor(valor);
 			caixa.setVendaCabecalho(vendaCabecalho);
+			caixa.setUsuario(u);
 
 			trx.begin();
 			manager.persist(caixa);
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Caixa criado com sucesso!!!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "Caixa no valor de R$ " + valor + " foi criado", dataAtual());
 
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao cria caixa!" + e);
 		}
 
 	}
-
+/*
 	private void criarCaixaDoCaixa2(AndroidCaixa ac) {
 
 		try {
@@ -1894,7 +1910,6 @@ public class JanelaAndroid extends JFrame {
 			caixa.setData(dataAtual());
 			caixa.setValor(ac.getValor());
 			caixa.setVendaCabecalho(buscarVendaCabecalho(ac.getVendaCabecalho()));
-
 			ac.setAtivo(false); // Muda o estado para recebido
 
 			trx.begin();
@@ -1909,7 +1924,7 @@ public class JanelaAndroid extends JFrame {
 		}
 
 	}
-
+*/
 	private void criarContaReceber(Cliente c, VendaCabecalho vc, Double valorDevido) {
 
 		int qtdDias = vc.getFormaPagamento().getNumeroDias();
@@ -1937,6 +1952,8 @@ public class JanelaAndroid extends JFrame {
 			}
 
 			JOptionPane.showMessageDialog(null, "Conta(s) a receber criada(s) com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "Conta a receber no valor de R$ " + valorDevido + " do cliente " + c.getRazaoSocial() + " referente a venda com id nº " + vc.getId() + "foi criada", dataAtual());
 
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro na criação da conta a receber!");
@@ -2017,6 +2034,11 @@ public class JanelaAndroid extends JFrame {
 	}
 
 	private void excluirVendaAndroid(AndroidVendaCabecalho avc) {
+		
+		Long id = avc.getId();
+		String cli = avc.getCliente().toString();
+		Double v = avc.getValorTotal();
+		
 		try {
 
 			Query consulta = manager.createQuery(
@@ -2037,6 +2059,9 @@ public class JanelaAndroid extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "A venda foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A venda android de id nº " + id + " do cliente id nº " + cli + " no valor de R$ " + v + " foi excluida", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -2052,11 +2077,19 @@ public class JanelaAndroid extends JFrame {
 			
 			AndroidContaReceber a = listaAndroidContaReceber.get(0);
 			
+			Long id = a.getId();
+			String cli = a.getCliente().toString();
+			Double v = a.getValorDevido();
+			
+			
 			trx.begin();
 			manager.remove(a);
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "A Conta Recebida foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A conta a receber com id nº " + id + " do cliente id nº " + cli + " no valor de R$ " + v + " foi excluido", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -2174,6 +2207,9 @@ public class JanelaAndroid extends JFrame {
 				trx.commit();
 
 				JOptionPane.showMessageDialog(null, "A conta foi abatida com sucesso!!!");
+				
+				CriarHistorico.criar(UsuarioLogado.getUsuario(), "O valor de R$ " + acr.getValorDevido() + " referente a conta a receber da venda com id nº " + acr.getVendaCabecalho() + " recebida pelo vendedor " + acr.getUsuario().toString() + " do cliente " + acr.getCliente().toString() + " foi aprovada", dataAtual());
+				
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "ERRO!! ao abater a conta a receber!!!");
 			}
@@ -2190,6 +2226,9 @@ public class JanelaAndroid extends JFrame {
 				trx.commit();
 
 				JOptionPane.showMessageDialog(null, "Conta recebida com sucesso!!!");
+				
+				CriarHistorico.criar(UsuarioLogado.getUsuario(), "O valor de R$ " + cr.getValorDevido() + " referente a conta a receber da venda com id nº " + acr.getVendaCabecalho() + " recebida pelo vendedor " + acr.getUsuario().toString() + " do cliente " + acr.getCliente().toString() + " foi aprovada", dataAtual());
+				
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "ERRO!! ao quitar a conta a receber!!!");
 			}

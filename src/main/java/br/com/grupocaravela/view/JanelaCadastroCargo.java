@@ -40,6 +40,8 @@ import br.com.grupocaravela.aguarde.EsperaLista;
 import br.com.grupocaravela.configuracao.EntityManagerProducer;
 import br.com.grupocaravela.objeto.Cargo;
 import br.com.grupocaravela.tablemodel.TableModelCargo;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 
 import java.awt.Toolkit;
 import javax.swing.JTextPane;
@@ -638,6 +640,9 @@ public class JanelaCadastroCargo extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Cargo foi salva com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "O cargo " + c.getNome() + " com o id nº " + c.getId() + " foi salvo", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -724,6 +729,10 @@ public class JanelaCadastroCargo extends JFrame {
 	}
 
 	private void excluirCargo(Cargo c) {
+		
+		String n = c.getNome();
+		Long id = c.getId();
+		
 		try {
 
 			trx.begin();
@@ -731,8 +740,20 @@ public class JanelaCadastroCargo extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Cargo foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "O cargo " + n + " com o id nº " + id + " foi excluido", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
 	}
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		// java.util.Date hoje = Calendar.getInstance().getTime();
+		return hoje;
+
+	}
+	
 }

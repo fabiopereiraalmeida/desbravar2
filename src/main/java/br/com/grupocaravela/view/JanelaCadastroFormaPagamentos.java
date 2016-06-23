@@ -44,6 +44,8 @@ import br.com.grupocaravela.objeto.FormaPagamento;
 import br.com.grupocaravela.render.MoedaRender;
 import br.com.grupocaravela.repositorio.RepositorioFormaPagamento;
 import br.com.grupocaravela.tablemodel.TableModelFormaPagamento;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 
 import java.awt.Toolkit;
 import javax.swing.border.LineBorder;
@@ -535,6 +537,9 @@ public class JanelaCadastroFormaPagamentos extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "FormaPagamento foi salva com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A forma de pagamento " + f.getNome() + " com o id nº " + f.getId() + "foi salva", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -564,12 +569,19 @@ public class JanelaCadastroFormaPagamentos extends JFrame {
 	}
 
 	private void excluirFormaPagamento(FormaPagamento f) {
+		
+		String n = f.getNome();
+		Long id = f.getId();
+		
 		try {
 
 			trx.begin();
 			manager.remove(f);
 
 			JOptionPane.showMessageDialog(null, "FormaPagamento foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A forma de pagamento " + n + " com o id nº " + id + "foi excluida", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -603,4 +615,13 @@ public class JanelaCadastroFormaPagamentos extends JFrame {
 
 		return retorno;
 	}
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		// java.util.Date hoje = Calendar.getInstance().getTime();
+		return hoje;
+
+	}
+	
 }

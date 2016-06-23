@@ -66,6 +66,7 @@ import br.com.grupocaravela.repositorio.RepositorioCreditoUsuario;
 import br.com.grupocaravela.repositorio.RepositorioProduto;
 import br.com.grupocaravela.repositorio.RepositorioUsuario;
 import br.com.grupocaravela.tablemodel.TableModelListaVendas;
+import br.com.grupocaravela.util.CriarHistorico;
 import br.com.grupocaravela.util.UsuarioLogado;
 import net.sf.jasperreports.engine.JRException;
 
@@ -1334,6 +1335,12 @@ public class JanelaVendas extends JFrame {
 
 		JOptionPane.showMessageDialog(null, "Venda concluida com sucesso!");
 		
+		try {
+			CriarHistorico.criar(u, "Venda de ID " + v.getId().toString() + ", realizada em desktop no valor de " + valor.toString() + " para o cliente " + c.getRazaoSocial() + " com ID " + c.getId().toString(), dataAtual());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro ao criar historico. Favor entrar em contato com o suporte!");
+		}
+				
 		limparCampos();
 		desativarVenda();
 
@@ -1381,6 +1388,7 @@ public class JanelaVendas extends JFrame {
 			caixa.setData(dataAtual());
 			caixa.setValor(vc.getValorTotal());
 			caixa.setVendaCabecalho(vc);
+			caixa.setUsuario(vc.getUsuario());
 
 			trx.begin();
 			manager.persist(caixa);

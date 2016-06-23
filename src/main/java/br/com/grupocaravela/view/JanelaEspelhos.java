@@ -39,6 +39,8 @@ import br.com.grupocaravela.objeto.Usuario;
 import br.com.grupocaravela.relatorios.ChamaRelatorio;
 import br.com.grupocaravela.relatorios.ChamaRelatorioEspelho;
 import br.com.grupocaravela.util.ConectaBanco;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 import br.com.grupocaravela.view.JanelaVendas.ThreadBasica;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -93,6 +95,8 @@ public class JanelaEspelhos extends JFrame {
 	private JComboBox cbVendedorVendas;
 
 	private JComboBox cbRotaVendas;
+	
+	private SimpleDateFormat formatBra = new SimpleDateFormat("dd/MM/yyyy");
 
 	/**
 	 * Launch the application.
@@ -203,6 +207,9 @@ public class JanelaEspelhos extends JFrame {
 								(Usuario) cbVendedorVendasProdutos2.getSelectedItem(),
 								(Rota) cbRotaVendaProdutos3.getSelectedItem(), dcDataInicialVendasProdutos.getDate(),
 								dcDataFinalVendasProdutos.getDate());
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório de espelho de produtos vendidos na rota " + cbRotaVendaProdutos3.getSelectedItem() + " e vendedor " + cbVendedorVendasProdutos2.getSelectedItem() + " entre as datas " + formatBra.format(dcDataInicialVendasProdutos.getDate()) + " e " + formatBra.format(dcDataFinalVendasProdutos.getDate()), dataAtual());
+						
 					//} catch (JRException e1) {
 						// TODO Auto-generated catch block
 					//	e1.printStackTrace();
@@ -279,6 +286,8 @@ public class JanelaEspelhos extends JFrame {
 								null,
 								(Rota) cbRotaVendaProdutos3.getSelectedItem(), dcDataInicialVendasProdutos.getDate(),
 								dcDataFinalVendasProdutos.getDate());
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório de espelho de produtos vendidos na rota " + cbRotaVendaProdutos1.getSelectedItem() + " entre as datas " + formatBra.format(dcDataInicialVendasProdutos.getDate()) + " e " + formatBra.format(dcDataFinalVendasProdutos.getDate()), dataAtual());
 					//} catch (JRException e1) {
 						// TODO Auto-generated catch block
 					//	e1.printStackTrace();
@@ -337,6 +346,9 @@ public class JanelaEspelhos extends JFrame {
 								null,
 								null, dcDataInicialVendasProdutos.getDate(),
 								dcDataFinalVendasProdutos.getDate());
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório de espelho de produtos vendidos sem filtro entre as datas " + formatBra.format(dcDataInicialVendasProdutos.getDate()) + " e " + formatBra.format(dcDataFinalVendasProdutos.getDate()), dataAtual());
+						
 					//} catch (JRException e1) {
 						// TODO Auto-generated catch block
 					//	e1.printStackTrace();
@@ -447,6 +459,9 @@ public class JanelaEspelhos extends JFrame {
 
 					try {
 						cr.report("EspelhoContasReceberSemFiltro.jasper");
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório de contas a receber sem filtro", dataAtual());
+						
 					} catch (JRException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -491,6 +506,9 @@ public class JanelaEspelhos extends JFrame {
 					try {
 						cre.report("EspelhoContasReceberRota.jasper", null,
 								(Rota) cbRotaContasReceber1.getSelectedItem(), null, null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório de contas a receber na rota " + cbRotaContasReceber1.getSelectedItem(), dataAtual());
+						
 					} catch (JRException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -547,6 +565,9 @@ public class JanelaEspelhos extends JFrame {
 					try {
 						cre.report("EspelhoContasReceberRotaVendedor.jasper", (Usuario) cbVendedorContasReceber.getSelectedItem(),
 								(Rota) cbRotaContasReceber2.getSelectedItem(), null, null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório de contas a receber na rota " + cbRotaContasReceber1.getSelectedItem() + " e vendedor " + cbVendedorContasReceber.getSelectedItem(), dataAtual());
+						
 					} catch (JRException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -626,6 +647,9 @@ public class JanelaEspelhos extends JFrame {
 					try {
 						cre.report("EspelhoContasReceberRotaVendedorData.jasper", (Usuario) cbVendedorContasReceber3.getSelectedItem(),
 								(Rota) cbRotaContasReceber3.getSelectedItem(), dcInicialContasReceber.getDate(), dcFinalContasReceber.getDate());
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório de contas a receber na rota " + cbRotaContasReceber3.getSelectedItem() + " e vendedor " + cbVendedorContasReceber3.getSelectedItem() + " entre as datas " + formatBra.format(dcInicialContasReceber.getDate()) + " e " + formatBra.format(dcFinalContasReceber.getDate()), dataAtual());
+						
 					} catch (JRException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -782,6 +806,8 @@ public class JanelaEspelhos extends JFrame {
 								(Usuario) cbVendedorVendas.getSelectedItem(),
 								(Rota) cbRotaVendas.getSelectedItem(), dcDataInicialVendas.getDate(),
 								dcDataFinalVendas.getDate());
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório \"Espelho\" de vendas da rota " + cbRotaVendas.getSelectedItem() + " e vendedor " + cbVendedorVendas.getSelectedItem() + " entre as datas " + formatBra.format(dcDataInicialVendas.getDate()) + " e " + formatBra.format(dcDataFinalVendas.getDate()), dataAtual());
 					//} catch (JRException e1) {
 						// TODO Auto-generated catch block
 					//	e1.printStackTrace();
@@ -963,5 +989,13 @@ public class JanelaEspelhos extends JFrame {
 		retorno = dcDataFinalVendasProdutos.getDate();
 
 		return retorno;
+	}
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		// java.util.Date hoje = Calendar.getInstance().getTime();
+		return hoje;
+
 	}
 }

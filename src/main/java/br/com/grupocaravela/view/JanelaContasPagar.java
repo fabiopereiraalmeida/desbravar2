@@ -51,6 +51,7 @@ import br.com.grupocaravela.objeto.ContaPagar;
 import br.com.grupocaravela.render.MoedaRender;
 import br.com.grupocaravela.tablemodel.TableModelContaPagar;
 import java.awt.Font;
+import javax.swing.JCheckBox;
 
 public class JanelaContasPagar extends JFrame {
 
@@ -142,7 +143,7 @@ public class JanelaContasPagar extends JFrame {
 				.getImage(JanelaContasPagar.class.getResource("/br/com/grupocaravela/icones/logoCaravela.png")));
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 854, 428);
+		setBounds(100, 100, 854, 569);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -210,6 +211,7 @@ public class JanelaContasPagar extends JFrame {
 				new ImageIcon(JanelaContasPagar.class.getResource("/br/com/grupocaravela/icones/novo_24.png")));
 
 		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir.setEnabled(false);
 		btnExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -231,6 +233,7 @@ public class JanelaContasPagar extends JFrame {
 				JanelaContasPagar.class.getResource("/br/com/grupocaravela/icones/alerta_vermelho_24.png")));
 
 		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setIcon(new ImageIcon(JanelaContasPagar.class.getResource("/br/com/grupocaravela/icones/lupa_24.png")));
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -254,23 +257,24 @@ public class JanelaContasPagar extends JFrame {
 		});
 		btnDetalhes.setIcon(
 				new ImageIcon(JanelaContasPagar.class.getResource("/br/com/grupocaravela/icones/alterar_24.png")));
+		
+		JCheckBox chckbxTodas = new JCheckBox("Todas");
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 813, Short.MAX_VALUE)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addGap(12)
 							.addComponent(lblLocalizar)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(tfLocalizar, GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
+							.addComponent(chckbxTodas)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(tfLocalizar, GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_panel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 810, Short.MAX_VALUE))
-						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-							.addContainerGap(448, Short.MAX_VALUE)
 							.addComponent(btnExcluir, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
 							.addGap(12)
 							.addComponent(btnDetalhes)
@@ -281,22 +285,20 @@ public class JanelaContasPagar extends JFrame {
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(12)
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+					.addGap(18)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(tfLocalizar, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnBuscar)
 						.addComponent(lblLocalizar)
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGap(6)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(tfLocalizar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnBuscar))))
+						.addComponent(chckbxTodas))
 					.addGap(12)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnExcluir)
 						.addComponent(btnDetalhes)
 						.addComponent(btnNovo))
-					.addGap(9))
+					.addContainerGap())
 		);
 		panel.setLayout(gl_panel);
 
@@ -371,11 +373,11 @@ public class JanelaContasPagar extends JFrame {
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
-				.addComponent(tpObservacao, GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
+				.addComponent(tpObservacao, GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
-				.addComponent(tpObservacao, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
+				.addComponent(tpObservacao, GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
 		);
 		panel_2.setLayout(gl_panel_2);
 		
@@ -514,8 +516,8 @@ public class JanelaContasPagar extends JFrame {
 							.addComponent(lblEstado)))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
-					.addGap(31)
-					.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+					.addGap(187)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnPagarConta)
 						.addComponent(btnCancelar)
 						.addComponent(btnSalvar))
@@ -529,9 +531,7 @@ public class JanelaContasPagar extends JFrame {
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 385, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
 		);
 		contentPane.setLayout(gl_contentPane);
 

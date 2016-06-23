@@ -33,6 +33,7 @@ import br.com.grupocaravela.configuracao.Empresa;
 import br.com.grupocaravela.configuracao.Versao;
 import br.com.grupocaravela.objeto.Cargo;
 import br.com.grupocaravela.relatorios.ChamaRelatorio;
+import br.com.grupocaravela.util.CriarHistorico;
 import br.com.grupocaravela.util.UsuarioLogado;
 import net.sf.jasperreports.engine.JRException;
 
@@ -104,6 +105,7 @@ public class JanelaMenuPrincipal extends JFrame {
 	private JMenuItem mntmProdutosRelao;
 
 	private JMenuItem mntmCategorias;
+	private JMenuItem mntmHistoricoDeAes;
 
 	/**
 	 * Launch the application.
@@ -171,6 +173,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaHistoricoVendas historicoVendas = new JanelaHistoricoVendas();
 						historicoVendas.setVisible(true);
 						historicoVendas.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de historico de vendas", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -229,6 +233,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroCategorias cadastroCategorias = new JanelaCadastroCategorias();
 						cadastroCategorias.setVisible(true);
 						cadastroCategorias.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de categorias", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -277,6 +283,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroCargo cadastroCargo = new JanelaCadastroCargo();
 						cadastroCargo.setVisible(true);
 						cadastroCargo.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de cargos", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -332,6 +340,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroCidades cadastroCidades = new JanelaCadastroCidades();
 						cadastroCidades.setVisible(true);
 						cadastroCidades.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de cidades", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -383,6 +393,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroClientes cadastroClientes = new JanelaCadastroClientes();
 						cadastroClientes.setVisible(true);
 						cadastroClientes.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de clientes", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -434,6 +446,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroFormaPagamentos cadastroFormaPagamentos = new JanelaCadastroFormaPagamentos();
 						cadastroFormaPagamentos.setVisible(true);
 						cadastroFormaPagamentos.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de formas de pagamentos", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -485,6 +499,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroFornecedores cadastroFornecedores = new JanelaCadastroFornecedores();
 						cadastroFornecedores.setVisible(true);
 						cadastroFornecedores.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de fornecedores", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -536,6 +552,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroProdutos cadastroProdutos = new JanelaCadastroProdutos();
 						cadastroProdutos.setVisible(true);
 						cadastroProdutos.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de produtos", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -587,6 +605,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroRotas cadastroRotas = new JanelaCadastroRotas();
 						cadastroRotas.setVisible(true);
 						cadastroRotas.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de rotas", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -638,6 +658,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroUnidades cadastroUnidades = new JanelaCadastroUnidades();
 						cadastroUnidades.setVisible(true);
 						cadastroUnidades.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de unidades", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -689,6 +711,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroUsuarios cadastroUsuarios = new JanelaCadastroUsuarios();
 						cadastroUsuarios.setVisible(true);
 						cadastroUsuarios.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de usuarios", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -732,6 +756,7 @@ public class JanelaMenuPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					relatorioClienteDetalhado();
+					CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório de clientes detalhados", dataAtual());
 				} catch (JRException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -759,6 +784,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaEspelhos janelaEspelhos = new JanelaEspelhos();
 						janelaEspelhos.setVisible(true);
 						janelaEspelhos.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela relatórios/espelhos", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -809,6 +836,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCaixa janelaCaixa = new JanelaCaixa();
 						janelaCaixa.setVisible(true);
 						janelaCaixa.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela relatórios/caixa", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -851,6 +880,7 @@ public class JanelaMenuPrincipal extends JFrame {
 
 				try {
 					relatorioClienteSimples();
+					CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório de clientes simples", dataAtual());
 				} catch (JRException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -866,6 +896,7 @@ public class JanelaMenuPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					relatorioProdutoDetalhado();
+					CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório de produtos detalhados", dataAtual());
 				} catch (JRException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -882,6 +913,7 @@ public class JanelaMenuPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					relatorioProdutoSimples();
+					CriarHistorico.criar(UsuarioLogado.getUsuario(), "Gerou um relatório de produtos simples", dataAtual());
 				} catch (JRException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -894,6 +926,58 @@ public class JanelaMenuPrincipal extends JFrame {
 
 		JMenu mnFerramentas = new JMenu("Ferramentas");
 		menuBar.add(mnFerramentas);
+		
+		mntmHistoricoDeAes = new JMenuItem("Histórico de ações");
+		mntmHistoricoDeAes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// #############################################
+				final Thread tr = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							TimeUnit.SECONDS.sleep(0);
+						} catch (InterruptedException ex) {
+							Logger.getLogger(JanelaMenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+						}
+						// ######################METODO A SER
+						// EXECUTADO##############################
+						JanelaHistoricoAcoes janelaHistoricoAcoes = new JanelaHistoricoAcoes();
+						janelaHistoricoAcoes.setVisible(true);
+						janelaHistoricoAcoes.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela ferramentas/Histórico do sistema", dataAtual());
+						// ######################FIM METODO A SER
+						// EXECUTADO##############################
+					}
+				});
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						tr.start();
+						// .....
+						EsperaJanela espera = new EsperaJanela();
+						espera.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+						espera.setUndecorated(true);
+						espera.setVisible(true);
+						espera.setLocationRelativeTo(null);
+						try {
+							tr.join();
+							espera.dispose();
+
+						} catch (InterruptedException ex) {
+							// Logger.getLogger(MenuView.class.getName()).log(Level.SEVERE,
+							// null, ex);
+						}
+					}
+				}).start();
+
+				// ###############################################
+				
+			}
+		});
+		mntmHistoricoDeAes.setIcon(new ImageIcon(JanelaMenuPrincipal.class.getResource("/br/com/grupocaravela/icones/history_24.png")));
+		mnFerramentas.add(mntmHistoricoDeAes);
 
 		JMenu mnSistema = new JMenu("Sistema");
 		menuBar.add(mnSistema);
@@ -971,6 +1055,9 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaVendas vendas = new JanelaVendas();
 						vendas.setVisible(true);
 						vendas.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de vendas", dataAtual());
+						
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -1025,6 +1112,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroClientes cadastroClientes = new JanelaCadastroClientes();
 						cadastroClientes.setVisible(true);
 						cadastroClientes.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de clientes", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -1083,6 +1172,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaContasReceber janelaContasReceber = new JanelaContasReceber();
 						janelaContasReceber.setVisible(true);
 						janelaContasReceber.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de contas a receber", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -1134,6 +1225,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCadastroProdutos cadastroProdutos = new JanelaCadastroProdutos();
 						cadastroProdutos.setVisible(true);
 						cadastroProdutos.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de produtos", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -1187,6 +1280,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaCompras janelaCompras = new JanelaCompras();
 						janelaCompras.setVisible(true);
 						janelaCompras.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de compras", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -1241,6 +1336,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaContasPagar janelaContasPagar = new JanelaContasPagar();
 						janelaContasPagar.setVisible(true);
 						janelaContasPagar.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de contas a pagar", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -1296,6 +1393,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaAndroid android = new JanelaAndroid();
 						android.setVisible(true);
 						android.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abriu a janela de vendas no android", dataAtual());
 						// ######################FIM METODO A SER
 						// EXECUTADO##############################
 					}
@@ -1470,6 +1569,8 @@ public class JanelaMenuPrincipal extends JFrame {
 						JanelaLogin jnLogin = new JanelaLogin();
 						jnLogin.setVisible(true);
 						jnLogin.setLocationRelativeTo(null);
+						
+						CriarHistorico.criar(UsuarioLogado.getUsuario(), "Realizou o logOff", dataAtual());
 						
 						dispose();
 						// ######################FIM METODO A SER
@@ -1672,5 +1773,13 @@ public class JanelaMenuPrincipal extends JFrame {
 		if (cargo.isAcessoVendas()) {
 			btnVendas.setEnabled(true);
 		}
+	}
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		// java.util.Date hoje = Calendar.getInstance().getTime();
+		return hoje;
+
 	}
 }

@@ -70,6 +70,8 @@ import br.com.grupocaravela.objeto.Usuario;
 import br.com.grupocaravela.repositorio.RepositorioCreditoUsuario;
 import br.com.grupocaravela.repositorio.RepositorioUsuario;
 import br.com.grupocaravela.tablemodel.TableModelUsuario;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 
 import java.awt.Toolkit;
 import javax.swing.JTextPane;
@@ -1071,6 +1073,9 @@ public class JanelaCadastroUsuarios extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Usuario foi salva com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "O usuario " + tfNome.getText() + " com o id nº " + u.getId() + " foi salvo", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 			trx.commit();
@@ -1154,6 +1159,10 @@ public class JanelaCadastroUsuarios extends JFrame {
 	}
 
 	private void excluirUsuario(Usuario c) {
+		
+		String nome = c.getNome();
+		Long id = c.getId();
+				
 		try {
 
 			trx.begin();
@@ -1161,6 +1170,9 @@ public class JanelaCadastroUsuarios extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Usuario foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "Exclusão do usuario " + nome + " e de id nº " + id, dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 			
@@ -1449,5 +1461,12 @@ public class JanelaCadastroUsuarios extends JFrame {
 		} catch (Exception e1) {
 
 		}
+	}
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		return hoje;
+
 	}
 }

@@ -41,6 +41,8 @@ import br.com.grupocaravela.configuracao.EntityManagerProducer;
 import br.com.grupocaravela.objeto.Rota;
 import br.com.grupocaravela.repositorio.RepositorioRota;
 import br.com.grupocaravela.tablemodel.TableModelRota;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 
 import java.awt.Toolkit;
 import javax.swing.JTextPane;
@@ -475,6 +477,9 @@ public class JanelaCadastroRotas extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Rota foi salva com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A rota " + c.getNome() + " com o id nº " + c.getId() + " foi salva", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -496,6 +501,10 @@ public class JanelaCadastroRotas extends JFrame {
 	}
 
 	private void excluirRota(Rota c) {
+		
+		String n = c.getNome();
+		Long id = c.getId();
+		
 		try {
 			
 			trx.begin();
@@ -503,8 +512,19 @@ public class JanelaCadastroRotas extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Rota foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A rota " + n + " com o id nº " + id + " foi excluida", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
+	}
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		// java.util.Date hoje = Calendar.getInstance().getTime();
+		return hoje;
+
 	}
 }

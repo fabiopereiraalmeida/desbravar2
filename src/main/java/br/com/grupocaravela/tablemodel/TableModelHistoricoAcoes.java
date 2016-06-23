@@ -5,44 +5,44 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-import br.com.grupocaravela.objeto.Caixa;
+import br.com.grupocaravela.objeto.Historico;
 
-public class TableModelCaixa extends AbstractTableModel {
+public class TableModelHistoricoAcoes extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 	
 	private SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy");
 	private SimpleDateFormat formatDataHora = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-	private ArrayList<Caixa> listaCaixa;
+	private ArrayList<Historico> listaHistorico;
 	// Titulo das colunas
-	private String[] colunas = { "id", "Cod Venda", "Cliente", "Data", "Funcionario", "Valor", "Forma pagamento" };
+	private String[] colunas = { "id", "Data", "Usuario", "Descrição" };
 
 	// Construtor
-	public TableModelCaixa() {
-		this.listaCaixa = new ArrayList<>();
+	public TableModelHistoricoAcoes() {
+		this.listaHistorico = new ArrayList<>();
 	}
 
 	// ############### Inicio dos Metodos do TableModel ###################
-	public void addCaixa(Caixa c) {
-		this.listaCaixa.add(c);
+	public void addHistorico(Historico c) {
+		this.listaHistorico.add(c);
 		fireTableDataChanged();
 	}
 
-	public void removecaixa(int rowIndex) {
-		this.listaCaixa.remove(rowIndex);
+	public void removehistorico(int rowIndex) {
+		this.listaHistorico.remove(rowIndex);
 		fireTableDataChanged();
 	}
 
-	public Caixa getCaixa(int rowIndex) {
-		return this.listaCaixa.get(rowIndex);
+	public Historico getHistorico(int rowIndex) {
+		return this.listaHistorico.get(rowIndex);
 	}
 
 	// ############### Fim dos Metodos do TableModel ###################
 
 	@Override
 	public int getRowCount() {
-		return this.listaCaixa.size();
+		return this.listaHistorico.size();
 		// throw new UnsupportedOperationException("Not supported yet."); //To
 		// change body of generated methods, choose Tools | Templates.
 	}
@@ -59,51 +59,32 @@ public class TableModelCaixa extends AbstractTableModel {
 		switch (columnIndex) {
 
 		case 0:
-			return this.listaCaixa.get(rowIndex).getId();
+			return this.listaHistorico.get(rowIndex).getId();
 
 		case 1:
 			try {
-				return this.listaCaixa.get(rowIndex).getVendaCabecalho().getId();
+				return formatDataHora.format(this.listaHistorico.get(rowIndex).getData());
 			} catch (Exception e) {
 				return "";
 			}
-			
 			
 		case 2:			
 			try {
-        		return this.listaCaixa.get(rowIndex).getVendaCabecalho().getCliente().getRazaoSocial();
-			} catch (Exception e) {
-				return "Razão social não encontrada";
-			}
-			
-		case 3:			
-			try {
-        		return formatDataHora.format(this.listaCaixa.get(rowIndex).getData());
-			} catch (Exception e) {
-				return this.listaCaixa.get(rowIndex).getData();
-			}
-			
-			
-		case 4:
-			try {
-				return this.listaCaixa.get(rowIndex).getUsuario().getNome();
+        		return this.listaHistorico.get(rowIndex).getUsuario().getNome();
 			} catch (Exception e) {
 				return "";
 			}
 			
 			
-		case 5:
-			return this.listaCaixa.get(rowIndex).getValor();
+		case 3:
+			try {
+				return this.listaHistorico.get(rowIndex).getDescricao();
+			} catch (Exception e) {
+				return "";
+			}
 
-		case 6:
-			try {
-				return this.listaCaixa.get(rowIndex).getVendaCabecalho().getFormaPagamento().getNome();
-			} catch (Exception e) {
-				return "";
-			}
-			
 		default:
-			return this.listaCaixa.get(rowIndex); // Desta forma é retornado o
+			return this.listaHistorico.get(rowIndex); // Desta forma é retornado o
 													// objeto inteiro
 		}
 		// throw new UnsupportedOperationException("Not supported yet."); //To

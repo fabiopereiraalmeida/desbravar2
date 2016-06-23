@@ -46,6 +46,7 @@ import br.com.grupocaravela.objeto.Usuario;
 import br.com.grupocaravela.repositorio.RepositorioCategoria;
 import br.com.grupocaravela.repositorio.RepositorioRota;
 import br.com.grupocaravela.repositorio.RepositorioUsuario;
+import br.com.grupocaravela.util.CriarHistorico;
 import br.com.grupocaravela.util.UsuarioLogado;
 import br.com.grupocaravela.view.JanelaCadastroClientes.ThreadBasica;
 
@@ -348,6 +349,9 @@ public class JanelaLogin extends JFrame {
 				menuPrincipal.setVisible(true);
 				menuPrincipal.setLocationRelativeTo(null);
 				manager.close();
+				
+				CriarHistorico.criar(usuarioLogado, "O usuario " + usuarioLogado.getNome() + " fez login no sistema", dataAtual());
+				
 				dispose();
 				// ######################FIM METODO A SER
 				// EXECUTADO##############################

@@ -15,63 +15,53 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "caixa")
-public class Caixa implements Serializable {
+@Table(name = "historico")
+public class Historico implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	private Double valor;
-	private VendaCabecalho vendaCabecalho;
-	private Date dataRecebimento;
 	private Usuario usuario;
-
+	private String descricao;
+	private Date data;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public Long getId() {
 		return id;
 	}
-
+	
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	@Column(precision = 11, scale = 2)
-	public Double getValor() {
-		return valor;
-	}
-
-	public void setValor(Double valor) {
-		this.valor = valor;
-	}
-
-	@ManyToOne
-	@JoinColumn(name = "venda_cabecalho_id")
-	public VendaCabecalho getVendaCabecalho() {
-		return vendaCabecalho;
-	}
-
-	public void setVendaCabecalho(VendaCabecalho vendaCabecalho) {
-		this.vendaCabecalho = vendaCabecalho;
-	}
-
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getData() {
-		return dataRecebimento;
-	}
-
-	public void setData(Date data) {
-		this.dataRecebimento = data;
-	}
 	
 	@ManyToOne
-	@JoinColumn(name = "usuario_id")
+	@JoinColumn(name = "usuario_id", nullable = false)
 	public Usuario getUsuario() {
 		return usuario;
 	}
-
+	
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+	
+	@Column(name = "descricao", length = 240, nullable = false)
+	public String getDescricao() {
+		return descricao;
+	}
+	
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "data", nullable = false)
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
 	}
 
 	@Override
@@ -81,7 +71,7 @@ public class Caixa implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -90,7 +80,7 @@ public class Caixa implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Caixa other = (Caixa) obj;
+		Historico other = (Historico) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -98,5 +88,7 @@ public class Caixa implements Serializable {
 			return false;
 		return true;
 	}
-
+	
+	
+	
 }

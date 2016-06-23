@@ -23,6 +23,8 @@ import br.com.grupocaravela.render.MoedaRender;
 import br.com.grupocaravela.tablemodel.TableModelCliente;
 import br.com.grupocaravela.tablemodel.TableModelContasReceber;
 import br.com.grupocaravela.tablemodel.TableModelListaVendas;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -930,7 +932,7 @@ public class JanelaContasReceber extends JFrame {
 	}
 
 	private void abaterValorContaReceber(Double valor) {
-
+				
 		contaReceber.setValorDevido(contaReceber.getValorDevido() - valor);
 
 		try {
@@ -939,6 +941,9 @@ public class JanelaContasReceber extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Valor abatido com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "Abatimento de " + tfAbater.getText() + " de conta a receber com id \"" + contaReceber.getId() + "\" do cliente \"" + contaReceber.getCliente().getRazaoSocial() + " no valor de R$ " + contaReceber.getVendaCabecalho().getValorTotal(), dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao abater valor!" + e);
 		}
@@ -956,6 +961,9 @@ public class JanelaContasReceber extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Conta quitada com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "Quitação de conta a receber no valor de R$ " + cr.getValorDevido() + " com id \"" + cr.getId() + "\" do cliente \"" + cr.getCliente().getRazaoSocial() + " no valor de R$ " + cr.getVendaCabecalho().getValorTotal(), dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao quitar conta!" + e);
 		}
@@ -973,7 +981,13 @@ public class JanelaContasReceber extends JFrame {
 			try {
 				caixa.setVendaCabecalho(vc);
 			} catch (Exception e) {
-				// TODO: handle exception
+				JOptionPane.showMessageDialog(null, "Erro: " + e.getMessage());
+			}
+			
+			try {
+				caixa.setUsuario(UsuarioLogado.getUsuario());
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Erro: " + e.getMessage());
 			}
 				
 			trx.begin();

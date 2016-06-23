@@ -42,6 +42,8 @@ import br.com.grupocaravela.objeto.Unidade;
 import br.com.grupocaravela.repositorio.RepositorioRota;
 import br.com.grupocaravela.repositorio.RepositorioUnidade;
 import br.com.grupocaravela.tablemodel.TableModelUnidade;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 import br.com.grupocaravela.view.JanelaCadastroClientes.ThreadBasica;
 
 import java.awt.Toolkit;
@@ -487,10 +489,12 @@ public class JanelaCadastroUnidades extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Unidade foi salva com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A unidade " + c.getNome() + " e id nº " + c.getId() + "foi salva", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
-
 	}
 
 	private void carregarCampos(Unidade c) {
@@ -506,6 +510,10 @@ public class JanelaCadastroUnidades extends JFrame {
 	}
 
 	private void excluirUnidade(Unidade c) {
+		
+		String n = c.getNome();
+		Long id = c.getId();
+		
 		try {
 			
 			trx.begin();
@@ -513,8 +521,19 @@ public class JanelaCadastroUnidades extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Unidade foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A unidade " + n + " e id nº " + id + "foi excluida", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
+	}
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		// java.util.Date hoje = Calendar.getInstance().getTime();
+		return hoje;
+
 	}
 }

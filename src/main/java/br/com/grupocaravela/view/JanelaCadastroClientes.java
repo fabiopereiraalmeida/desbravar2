@@ -77,6 +77,8 @@ import br.com.grupocaravela.objeto.EnderecoCliente;
 import br.com.grupocaravela.objeto.Rota;
 import br.com.grupocaravela.objeto.TelefoneCliente;
 import br.com.grupocaravela.tablemodel.TableModelCliente;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 
 public class JanelaCadastroClientes extends JFrame {
 
@@ -1387,6 +1389,9 @@ public class JanelaCadastroClientes extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Cliente foi salva com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "O cliente " + c.getRazaoSocial() + " com id nº " + c.getId() + "foi salvo", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -1511,6 +1516,10 @@ public class JanelaCadastroClientes extends JFrame {
 	}
 
 	private void excluirCliente(Cliente c) {
+		
+		String n = c.getRazaoSocial();
+		Long id = c.getId();
+		
 		try {
 
 			trx.begin();
@@ -1518,6 +1527,9 @@ public class JanelaCadastroClientes extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Cliente foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "O cliente " + n + " com id nº " + id + "foi excluido", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -1936,6 +1948,8 @@ public class JanelaCadastroClientes extends JFrame {
 		}
 		in.close();
 		fis.close();
+		
+		CriarHistorico.criar(UsuarioLogado.getUsuario(), "A imagem do cliente " + cliente.getRazaoSocial() + " com id nº " + cliente.getId() + "foi alterada", dataAtual());
 
 	}
 

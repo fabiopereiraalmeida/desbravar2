@@ -29,6 +29,8 @@ import org.jdom.output.XMLOutputter;
 
 import br.com.grupocaravela.configuracao.Empresa;
 import br.com.grupocaravela.configuracao.EntityManagerProducer;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -421,6 +423,8 @@ public class JanelaConfiguracao extends JFrame {
 
 				JOptionPane.showMessageDialog(null,
 						"O sistema será fechado para que as configurações sejam aplicadas!");
+				
+				CriarHistorico.criar(UsuarioLogado.getUsuario(), "Alteração de configuração", dataAtual());
 
 				System.exit(0);
 
@@ -775,5 +779,13 @@ public class JanelaConfiguracao extends JFrame {
 			tfFrase.setText(empresa.getChildText("frase"));
 
 		}
+	}
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		// java.util.Date hoje = Calendar.getInstance().getTime();
+		return hoje;
+
 	}
 }

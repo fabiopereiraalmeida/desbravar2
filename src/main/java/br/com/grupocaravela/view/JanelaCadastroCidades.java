@@ -41,6 +41,8 @@ import br.com.grupocaravela.configuracao.EntityManagerProducer;
 import br.com.grupocaravela.objeto.Cidade;
 import br.com.grupocaravela.repositorio.RepositorioCidade;
 import br.com.grupocaravela.tablemodel.TableModelCidade;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 
 import java.awt.Toolkit;
 
@@ -453,6 +455,9 @@ public class JanelaCadastroCidades extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Cidade foi salva com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A cidade " + c.getNome() + " com o id nº " + c.getId() + " foi salva", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -474,6 +479,10 @@ public class JanelaCadastroCidades extends JFrame {
 	}
 
 	private void excluirCidade(Cidade c) {
+		
+		String n = c.getNome();
+		Long id = c.getId();
+		
 		try {
 
 			trx.begin();
@@ -481,8 +490,19 @@ public class JanelaCadastroCidades extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Cidade foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A cidade " + n + " com o id nº " + id + " foi excluida", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
+	}
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		// java.util.Date hoje = Calendar.getInstance().getTime();
+		return hoje;
+
 	}
 }

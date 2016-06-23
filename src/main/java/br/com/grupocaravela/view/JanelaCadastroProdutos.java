@@ -71,6 +71,8 @@ import br.com.grupocaravela.objeto.Produto;
 import br.com.grupocaravela.objeto.Unidade;
 import br.com.grupocaravela.render.MoedaRender;
 import br.com.grupocaravela.tablemodel.TableModelProduto;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 
 public class JanelaCadastroProdutos extends JFrame {
 
@@ -784,6 +786,9 @@ public class JanelaCadastroProdutos extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Produto foi salva com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "O produto " + p.getNome() + " com o id nº " + p.getId() + " foi salvo", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -830,6 +835,10 @@ public class JanelaCadastroProdutos extends JFrame {
 	}
 
 	private void excluirProduto(Produto p) {
+		
+		String n = p.getNome();
+		Long id = p.getId();
+		
 		try {
 			
 			p.setAtivo(false);
@@ -839,6 +848,9 @@ public class JanelaCadastroProdutos extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Produto foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "O produto " + n + " com o id nº " + id + " foi excluido", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -1089,6 +1101,9 @@ public class JanelaCadastroProdutos extends JFrame {
 			}
 			in.close();
 			fis.close();
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A imagem do produto " + produto.getNome() + " com o id nº " + produto.getId() + " foi alterada", dataAtual());
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -1138,4 +1153,13 @@ public class JanelaCadastroProdutos extends JFrame {
         tableLista.getColumnModel().getColumn(5).setWidth(50);
         tableLista.getColumnModel().getColumn(5).setMaxWidth(50);
     }
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		// java.util.Date hoje = Calendar.getInstance().getTime();
+		return hoje;
+
+	}
+	
 }

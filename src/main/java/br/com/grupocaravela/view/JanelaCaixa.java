@@ -1,5 +1,6 @@
 package br.com.grupocaravela.view;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -41,8 +42,12 @@ import br.com.grupocaravela.configuracao.EntityManagerProducer;
 import br.com.grupocaravela.mask.DecimalFormattedField;
 import br.com.grupocaravela.objeto.Caixa;
 import br.com.grupocaravela.objeto.Usuario;
+import br.com.grupocaravela.relatorios.ChamaRelatorioEspelho;
 import br.com.grupocaravela.render.MoedaRender;
 import br.com.grupocaravela.tablemodel.TableModelCaixa;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
+
 import javax.swing.LayoutStyle.ComponentPlacement;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JComboBox;
@@ -66,6 +71,7 @@ public class JanelaCaixa extends JFrame {
 	private JDateChooser dcDataFinal;
 
 	private SimpleDateFormat formatDataHoraInternacional = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private JComboBox cbUsuario;
 	//private SimpleDateFormat formatDataHoraInternacional = new SimpleDateFormat("yyyy-MM-dd");
 	
 	// private RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
@@ -102,7 +108,10 @@ public class JanelaCaixa extends JFrame {
 
 		iniciaConexao();
 		
-		//carregajcbFuncionario();
+		carregajcbUsuario();
+		
+		dcDataInicial.setDate(dataAtual());
+		dcDataFinal.setDate(dataAtual());
 
 		// Evento ao abrir a janela
 		addWindowListener(new WindowAdapter() {
@@ -192,20 +201,43 @@ public class JanelaCaixa extends JFrame {
 
 		dcDataInicial = new JDateChooser();
 
-		JLabel label = new JLabel("Data Inicial");
+		JLabel lblDataInicial = new JLabel("Data Inicial:");
 
-		JLabel label_1 = new JLabel("Data final");
+		JLabel lblDataFinal = new JLabel("Data final:");
 
 		dcDataFinal = new JDateChooser();
 
 		JLabel lblValorTotal = new JLabel("Valor Total:");
 
 		tfValorTotal = new DecimalFormattedField(DecimalFormattedField.REAL);
+		tfValorTotal.setEditable(false);
+		tfValorTotal.setEnabled(false);
 		tfValorTotal.setFont(new Font("Dialog", Font.PLAIN, 16));
 		tfValorTotal.setColumns(10);
+		tfValorTotal.setDisabledTextColor(Color.BLACK);
 		
 		JButton btnImprimir = new JButton("Imprimir");
+		btnImprimir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				ChamaRelatorioEspelho chamaRelatorioEspelho = new ChamaRelatorioEspelho();
+				
+				Usuario u = (Usuario) cbUsuario.getSelectedItem();
+				Double tt = Double.valueOf(tfValorTotal.getText().replace("R$ ", "").replace(".", "").replace(",", "."));
+				
+				try {
+					chamaRelatorioEspelho.reportEspelhoCaixa("EspelhoCaixa.jasper", u, null, dcDataInicial.getDate(), dcDataFinal.getDate(), tt);
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, e2.getMessage());
+				}
+				
+			}
+		});
 		btnImprimir.setIcon(new ImageIcon(JanelaCaixa.class.getResource("/br/com/grupocaravela/icones/impressora_24.png")));
+		
+		cbUsuario = new JComboBox();
+		
+		JLabel lblUsuario = new JLabel("Usuario:");
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.TRAILING)
@@ -228,11 +260,16 @@ public class JanelaCaixa extends JFrame {
 									.addGap(18)
 									.addComponent(dcDataFinal, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_panel.createSequentialGroup()
-									.addComponent(label, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-									.addGap(60)
-									.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)))
-							.addGap(331)
-							.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 154, GroupLayout.PREFERRED_SIZE)))
+									.addComponent(lblDataInicial)
+									.addGap(55)
+									.addComponent(lblDataFinal)))
+							.addGap(18)
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblUsuario)
+								.addGroup(gl_panel.createSequentialGroup()
+									.addComponent(cbUsuario, GroupLayout.PREFERRED_SIZE, 283, GroupLayout.PREFERRED_SIZE)
+									.addGap(81)
+									.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)))))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -240,17 +277,22 @@ public class JanelaCaixa extends JFrame {
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(7)
 					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(cbUsuario, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnBuscar))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-								.addComponent(label)
-								.addComponent(label_1))
+								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+									.addComponent(lblDataFinal)
+									.addComponent(lblUsuario))
+								.addComponent(lblDataInicial))
 							.addGap(11)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addComponent(dcDataInicial, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dcDataFinal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addComponent(btnBuscar))
+								.addComponent(dcDataFinal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(5)))
 					.addGap(18)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnExcluir, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -273,7 +315,7 @@ public class JanelaCaixa extends JFrame {
 		numeroMoeda.setMinimumFractionDigits(2);
 		DefaultTableCellRenderer cellRendererCustomMoeda = new MoedaRender(numeroMoeda);
 
-		tableLista.getColumnModel().getColumn(4).setCellRenderer(cellRendererCustomMoeda);
+		tableLista.getColumnModel().getColumn(5).setCellRenderer(cellRendererCustomMoeda);
 	}
 
 	private void carregarTabela() {
@@ -332,14 +374,16 @@ public class JanelaCaixa extends JFrame {
 				// ######################METODO A SER
 				// EXECUTADO##############################
 				limparTabela();
+				
+				Usuario u = (Usuario) cbUsuario.getSelectedItem();
 
 				try {
 					Double totalSomado = 0.0;
-					// trx.begin();
-					// Query consulta = manager.createQuery("from Caixa where
-					// nome like '%" + tfLocalizar.getText() + "%'");
-					Query consulta = manager.createQuery("FROM Caixa WHERE data BETWEEN '" + dataInical + "' AND '" + dataFinal + "'");// AND venda_cabecalho_id IN (SELECT id FROM VendaCabecalho WHERE usuario_id IN (SELECT Usuario WHERE id LIKE '" + user.getId() + "'))");
-					//Query consulta = manager.createQuery("FROM Caixa WHERE venda_cabecalho_id IN (SELECT id FROM VendaCabecalho WHERE usuario_id IN (SELECT Usuario WHERE id LIKE '" + user.getId() + "'))"); //data BETWEEN '" + dataInical + "' AND '" + dataFinal + "' AND venda_cabecalho_id IN (SELECT id FROM VendaCabecalho WHERE usuario_id IN (SELECT Usuario WHERE id LIKE '" + user.getId() + "'))");
+					
+					//Query consulta = manager.createQuery("FROM Caixa WHERE data BETWEEN '" + dataInical + "' AND '" + dataFinal + "' AND venda_cabecalho_id IN (SELECT id FROM VendaCabecalho WHERE usuario_id = '" + u.getId() + "') ORDER BY id DESC");// AND venda_cabecalho_id IN (SELECT id FROM VendaCabecalho WHERE usuario_id IN (SELECT Usuario WHERE id LIKE '" + user.getId() + "'))");
+					
+					Query consulta = manager.createQuery("FROM Caixa WHERE data BETWEEN '" + dataInical + "' AND '" + dataFinal + "' AND usuario_id = '" + u.getId() + "' ORDER BY id DESC");
+					
 					List<Caixa> listaCaixas = consulta.getResultList();
 					// trx.commit();
 
@@ -388,13 +432,20 @@ public class JanelaCaixa extends JFrame {
 	}
 
 	private void excluirCaixa(Caixa c) {
-		try {
 
+		Double valor = c.getValor();
+		Long id = c.getId();
+		
+		try {
+			
 			trx.begin();
 			manager.remove(c);
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Caixa foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "Exclusão do caixa id nº " + id + " no valor de R$ " + valor, dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -408,11 +459,41 @@ public class JanelaCaixa extends JFrame {
 		tableLista.getColumnModel().getColumn(1).setWidth(50);
 		tableLista.getColumnModel().getColumn(1).setMaxWidth(80);
 		
-		tableLista.getColumnModel().getColumn(2).setWidth(150);
-		tableLista.getColumnModel().getColumn(2).setMaxWidth(150);
+		tableLista.getColumnModel().getColumn(3).setWidth(150);
+		tableLista.getColumnModel().getColumn(3).setMaxWidth(150);
 		
-		tableLista.getColumnModel().getColumn(4).setWidth(120);
-		tableLista.getColumnModel().getColumn(4).setMaxWidth(150);
+		tableLista.getColumnModel().getColumn(5).setWidth(120);
+		tableLista.getColumnModel().getColumn(5).setMaxWidth(150);
+
+	}
+	
+	private void carregajcbUsuario() {
+		
+		cbUsuario.removeAllItems();
+
+		try {
+
+			Query consulta = manager.createQuery("from Usuario");
+			List<Usuario> listaUsuarios = consulta.getResultList();
+			
+
+			for (int i = 0; i < listaUsuarios.size(); i++) {
+
+				Usuario u = listaUsuarios.get(i);
+				cbUsuario.addItem(u);
+			}
+
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro no carregamento do ComboBox do usuario! " + e);
+			trx.commit();
+		}
+	}
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		// java.util.Date hoje = Calendar.getInstance().getTime();
+		return hoje;
 
 	}
 }

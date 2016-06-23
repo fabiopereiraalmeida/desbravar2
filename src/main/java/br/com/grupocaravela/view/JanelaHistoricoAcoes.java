@@ -46,6 +46,7 @@ import br.com.grupocaravela.objeto.Cidade;
 import br.com.grupocaravela.objeto.Cliente;
 import br.com.grupocaravela.objeto.EnderecoCliente;
 import br.com.grupocaravela.objeto.FormaPagamento;
+import br.com.grupocaravela.objeto.Historico;
 import br.com.grupocaravela.objeto.Usuario;
 import br.com.grupocaravela.objeto.VendaCabecalho;
 import br.com.grupocaravela.relatorios.ChamaRelatorioComprovanteVenda;
@@ -53,13 +54,16 @@ import br.com.grupocaravela.relatorios.ChamaRelatorioComprovanteVenda2Via;
 import br.com.grupocaravela.render.MoedaRender;
 import br.com.grupocaravela.repositorio.RepositorioCidade;
 import br.com.grupocaravela.tablemodel.TableModelCidade;
+import br.com.grupocaravela.tablemodel.TableModelHistoricoAcoes;
 import br.com.grupocaravela.tablemodel.TableModelHistoricoVendas;
 import br.com.grupocaravela.util.CriarHistorico;
 import br.com.grupocaravela.util.UsuarioLogado;
 
 import java.awt.Toolkit;
+import javax.swing.JComboBox;
+import com.toedter.calendar.JDateChooser;
 
-public class JanelaHistoricoVendas extends JFrame {
+public class JanelaHistoricoAcoes extends JFrame {
 
 	// private EntityManagerFactory factory;
 	//private EntityManagerProducer entityManagerProducer = new EntityManagerProducer();
@@ -67,16 +71,16 @@ public class JanelaHistoricoVendas extends JFrame {
 	private EntityTransaction trx;
 	
 	private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+	private SimpleDateFormat formatSQL = new SimpleDateFormat("yyyy-MM-dd");
 
-	private TableModelHistoricoVendas tableModelHistoricoVendas;
+	private TableModelHistoricoAcoes tableModelHistoricoAcoes;
 
 	private JPanel contentPane;
 	private JTextField tfLocalizar;
 	private JTable tableLista;
-
-	private Cidade cidade;
-
-	// private RepositorioCidade repositorioCidade = new RepositorioCidade();
+	private JDateChooser dcDataInicial;
+	private JDateChooser dcDataFinal;
+	private JComboBox comboBox;
 
 	/**
 	 * Launch the application.
@@ -87,7 +91,7 @@ public class JanelaHistoricoVendas extends JFrame {
 			public void run() {
 
 				try {
-					JanelaHistoricoVendas frame = new JanelaHistoricoVendas();
+					JanelaHistoricoAcoes frame = new JanelaHistoricoAcoes();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
@@ -101,11 +105,17 @@ public class JanelaHistoricoVendas extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public JanelaHistoricoVendas() {
+	public JanelaHistoricoAcoes() {
 
 		criarJanela();
 		carregarTableModel();
+		tamanhoColunas();
 		iniciaConexao();
+		
+		carregajcb();
+		
+		dcDataInicial.setDate(dataAtual());
+		dcDataFinal.setDate(dataAtual());
 
 		// Evento ao abrir a janela
 		addWindowListener(new WindowAdapter() {
@@ -134,12 +144,12 @@ public class JanelaHistoricoVendas extends JFrame {
 
 	private void criarJanela() {
 
-		setTitle("Histórico de vendas");
+		setTitle("Histórico de ações no sistema");
 		setIconImage(Toolkit.getDefaultToolkit()
-				.getImage(JanelaHistoricoVendas.class.getResource("/br/com/grupocaravela/icones/logoCaravela.png")));
+				.getImage(JanelaHistoricoAcoes.class.getResource("/br/com/grupocaravela/icones/logoCaravela.png")));
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 784, 428);
+		setBounds(100, 100, 932, 428);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -153,9 +163,9 @@ public class JanelaHistoricoVendas extends JFrame {
 					}
 				});
 		
-				JLabel lblLocalizar = new JLabel("Localizar:");
+				JLabel lblLocalizar = new JLabel("Localizar descrição:");
 				lblLocalizar.setIcon(
-						new ImageIcon(JanelaHistoricoVendas.class.getResource("/br/com/grupocaravela/icones/lupa_24.png")));
+						new ImageIcon(JanelaHistoricoAcoes.class.getResource("/br/com/grupocaravela/icones/lupa_24.png")));
 		
 				tfLocalizar = new JTextField();
 				tfLocalizar.addFocusListener(new FocusAdapter() {
@@ -189,86 +199,114 @@ public class JanelaHistoricoVendas extends JFrame {
 					}
 				});
 		
-		JButton btnImprimirVia = new JButton("Imprimir 2ª via do comprovante de venda");
+		JButton btnImprimirVia = new JButton("Imprimir");
 		btnImprimirVia.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-								
-				VendaCabecalho vc = tableModelHistoricoVendas.getVendaCabecalho(tableLista.getSelectedRow());
-				
-				imprimirComprovante(vc, vc.getCliente(), vc.getFormaPagamento(), vc.getUsuario());
-				
-				CriarHistorico.criar(UsuarioLogado.getUsuario(), "Impressão de relatório de histórico da venda de código " + vc.getId(), dataAtual());
 				
 			}
 		});
-		btnImprimirVia.setIcon(new ImageIcon(JanelaHistoricoVendas.class.getResource("/br/com/grupocaravela/icones/impressora_24.png")));
+		btnImprimirVia.setIcon(new ImageIcon(JanelaHistoricoAcoes.class.getResource("/br/com/grupocaravela/icones/impressora_24.png")));
+		
+		comboBox = new JComboBox();
+		
+		JLabel lblUsuario = new JLabel("Usuario:");
+		
+		JLabel lblDataInicial = new JLabel("Data Inicial:");
+		
+		dcDataInicial = new JDateChooser();
+		
+		JLabel lblDataFinal = new JLabel("Data final:");
+		
+		dcDataFinal = new JDateChooser();
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblLocalizar)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 896, Short.MAX_VALUE)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblDataInicial)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(dcDataInicial, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblDataFinal)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(dcDataFinal, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblLocalizar)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(tfLocalizar, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblUsuario)))
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(tfLocalizar, GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
+							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))
-						.addComponent(btnImprimirVia))
+							.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
+							.addGap(6))
+						.addComponent(btnImprimirVia, Alignment.TRAILING))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(15)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(tfLocalizar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnBuscar)))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(15)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+										.addComponent(tfLocalizar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblUsuario)
+										.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(lblLocalizar, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblDataInicial)
+								.addComponent(dcDataInicial, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblDataFinal)
+								.addComponent(dcDataFinal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(lblLocalizar, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(btnBuscar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
 					.addGap(18)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnImprimirVia))
+					.addComponent(btnImprimirVia)
+					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
 
 	}
 
 	private void carregarTableModel() {
-		this.tableModelHistoricoVendas = new TableModelHistoricoVendas();
-		this.tableLista.setModel(tableModelHistoricoVendas);
+		this.tableModelHistoricoAcoes = new TableModelHistoricoAcoes();
+		this.tableLista.setModel(tableModelHistoricoAcoes);		
 		
-		NumberFormat numeroMoeda = NumberFormat.getNumberInstance();
-		numeroMoeda.setMinimumFractionDigits(2);
-		DefaultTableCellRenderer cellRendererCustomMoeda = new MoedaRender(numeroMoeda);
-		tableLista.getColumnModel().getColumn(4).setCellRenderer(cellRendererCustomMoeda);
 	}
 
 	private void carregarTabela() {
 		try {
 
-			// trx.begin();
-			Query consulta = manager.createQuery("from VendaCabecalho");
-			List<VendaCabecalho> listaVendaCabecalho = consulta.getResultList();
-			// trx.commit();
+			Query consulta = manager.createQuery("from Historico");
+			List<Historico> listaHistorico = consulta.getResultList();
 
-			for (int i = 0; i < listaVendaCabecalho.size(); i++) {
-				VendaCabecalho c = listaVendaCabecalho.get(i);
-				tableModelHistoricoVendas.addVendaCabecalho(c);
+			for (int i = 0; i < listaHistorico.size(); i++) {
+				Historico h = listaHistorico.get(i);
+				tableModelHistoricoAcoes.addHistorico(h);
 			}
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao carregar a tabela de cidades: " + e);
+			JOptionPane.showMessageDialog(null, "Erro ao carregar a tabela de históricos: " + e);
 		}
 	}
 
 	private void limparTabela() {
 		while (tableLista.getModel().getRowCount() > 0) {
-			tableModelHistoricoVendas.removeVendaCabecalho(0);
+			tableModelHistoricoAcoes.removehistorico(0);
 		}
 	}
 
@@ -281,23 +319,29 @@ public class JanelaHistoricoVendas extends JFrame {
 				try {
 					TimeUnit.SECONDS.sleep(0);
 				} catch (InterruptedException ex) {
-					Logger.getLogger(JanelaHistoricoVendas.class.getName()).log(Level.SEVERE, null, ex);
+					Logger.getLogger(JanelaHistoricoAcoes.class.getName()).log(Level.SEVERE, null, ex);
 				}
 				// ######################METODO A SER
 				// EXECUTADO##############################
 				limparTabela();
 
+				Usuario usuario = (Usuario) comboBox.getSelectedItem();
+				
+				//String dataInicial = formatSQL.format(dcDataInicial.getDate() + " 00:00:00");
+				//String dataFinal = formatSQL.format(dcDataFinal.getDate() + " 23:59:59");
+				
+				String dataInicial = formatSQL.format(dcDataInicial.getDate());
+				String dataFinal = formatSQL.format(dcDataFinal.getDate());
+				
 				try {
 
-					// trx.begin();
-					Query consulta = manager
-							.createQuery("from VendaCabecalho");
-					List<VendaCabecalho> listaVendaCabecalho = consulta.getResultList();
-					// trx.commit();
+					Query consulta = manager.createQuery("from Historico WHERE usuario_id LIKE '" + usuario.getId() + "' AND data BETWEEN '" + dataInicial + " 00:00:00' AND '" + dataFinal + " 23:59:59'");
+					//Query consulta = manager.createQuery("from Historico WHERE usuario_id LIKE '" + usuario.getId() + "'");
+					List<Historico> listaHistorico = consulta.getResultList();
 
-					for (int i = 0; i < listaVendaCabecalho.size(); i++) {
-						VendaCabecalho c = listaVendaCabecalho.get(i);
-						tableModelHistoricoVendas.addVendaCabecalho(c);
+					for (int i = 0; i < listaHistorico.size(); i++) {
+						Historico h = listaHistorico.get(i);
+						tableModelHistoricoAcoes.addHistorico(h);
 					}
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Erro ao carregar a tabela: " + e);
@@ -362,7 +406,6 @@ public class JanelaHistoricoVendas extends JFrame {
 						
 		try {							
 			
-			//chamaRelatorio.report((Usuario) cbUsuario.getSelectedItem(), cliente, enderecoCliente, f.getNome(), format.format(dataAtual()), dtVencimento, vcu.getId().toString(), vcu.getValorParcial().toString(), vcu.getValorDesconto().toString(), vcu.getValorTotal().toString());
 			chamaRelatorio.report(u, c, enderecoCliente, f.getNome(), format.format(vc.getDataVenda()), dtVencimento, vc.getId().toString(), vc.getValorParcial(), vc.getValorDesconto(), vc.getValorTotal());
 		} catch (Exception e1) {
 			JOptionPane.showMessageDialog(null, "Erro ao gerar relatório! " + e1.getMessage() );
@@ -372,7 +415,6 @@ public class JanelaHistoricoVendas extends JFrame {
 		
 		try {							
 			
-			//chamaRelatorio.report((Usuario) cbUsuario.getSelectedItem(), cliente, enderecoCliente, f.getNome(), format.format(dataAtual()), dtVencimento, vcu.getId().toString(), vcu.getValorParcial().toString(), vcu.getValorDesconto().toString(), vcu.getValorTotal().toString());
 			chamaRelatorio2.report(u, c, enderecoCliente, f.getNome(), format.format(vc.getDataVenda()), dtVencimento, vc.getId().toString(), vc.getValorParcial(), vc.getValorDesconto(), vc.getValorTotal());
 		} catch (Exception e1) {
 			JOptionPane.showMessageDialog(null, "Erro ao gerar relatório! " + e1.getMessage() );
@@ -382,8 +424,43 @@ public class JanelaHistoricoVendas extends JFrame {
 	private java.util.Date dataAtual() {
 
 		java.util.Date hoje = new java.util.Date();
-		// java.util.Date hoje = Calendar.getInstance().getTime();
 		return hoje;
 
 	}
+	
+	private void tamanhoColunas() {
+		// tableProdutos.setAutoResizeMode(tableProdutos.AUTO_RESIZE_OFF);
+		tableLista.getColumnModel().getColumn(0).setWidth(30);
+		tableLista.getColumnModel().getColumn(0).setMaxWidth(50);
+
+		tableLista.getColumnModel().getColumn(1).setMinWidth(100);
+		tableLista.getColumnModel().getColumn(1).setMaxWidth(140);
+
+		tableLista.getColumnModel().getColumn(2).setMinWidth(120);
+		tableLista.getColumnModel().getColumn(2).setMaxWidth(150);
+		
+		tableLista.getColumnModel().getColumn(0).setWidth(200);
+		tableLista.getColumnModel().getColumn(0).setMinWidth(150);
+	}
+	
+	private void carregajcb() {
+
+		comboBox.removeAllItems();
+
+		try {
+
+			Query consulta = manager.createQuery("from Usuario ORDER BY nome ASC");
+			List<Usuario> listaUsuarios = consulta.getResultList();
+
+			for (int i = 0; i < listaUsuarios.size(); i++) {
+
+				Usuario u = listaUsuarios.get(i);
+				comboBox.addItem(u);
+			}
+
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro no carregamento dos usuarios! " + e.getMessage());			
+		}
+	}
+		
 }

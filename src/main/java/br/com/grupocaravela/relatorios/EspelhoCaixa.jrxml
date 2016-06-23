@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2016-06-15T15:31:24 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EspelhoCaixa" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eac7f807-b02f-449c-a7c4-d91bf689bd81">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DESBRAVAR"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Dialog" fontSize="26" isBold="true"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Dialog" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Dialog" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Dialog" fontSize="12"/>
+	<parameter name="NOME_USUARIO" class="java.lang.String"/>
+	<parameter name="DATA_INICIAL_SQL" class="java.lang.String"/>
+	<parameter name="DATA_FINAL_SQL" class="java.lang.String"/>
+	<parameter name="DATA_INICIAL" class="java.lang.String"/>
+	<parameter name="DATA_FINAL" class="java.lang.String"/>
+	<parameter name="IP_SERVIDOR" class="java.lang.String"/>
+	<parameter name="TOTAL" class="java.lang.Double"/>
+	<queryString>
+		<![CDATA[SELECT desbravar.caixa.id,
+	desbravar.caixa.data,
+	desbravar.caixa.valor,
+	desbravar.usuario.nome,
+	desbravar.cliente.razao_social,
+	desbravar.forma_pagamento.nome
+FROM desbravar.caixa
+	INNER JOIN desbravar.venda_cabecalho ON 
+	 desbravar.caixa.venda_cabecalho_id = desbravar.venda_cabecalho.id 
+	INNER JOIN desbravar.usuario ON 
+	 desbravar.venda_cabecalho.usuario_id = desbravar.usuario.id 
+	INNER JOIN desbravar.cliente ON 
+	 desbravar.venda_cabecalho.cliente_id = desbravar.cliente.id 
+	INNER JOIN desbravar.forma_pagamento ON 
+	 desbravar.venda_cabecalho.forma_pagamento_id = desbravar.forma_pagamento.id 
+WHERE 
+	 desbravar.caixa.data BETWEEN $P{DATA_INICIAL_SQL} AND $P{DATA_FINAL_SQL} 
+	 AND desbravar.usuario.nome LIKE $P{NOME_USUARIO} 
+ORDER BY desbravar.caixa.id DESC]]>
+	</queryString>
+	<field name="data" class="java.sql.Timestamp"/>
+	<field name="valor" class="java.lang.Double"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="razao_social" class="java.lang.String"/>
+	<field name="COLUMN_6" class="java.lang.String"/>
+	<variable name="valor1" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<variable name="valor2" class="java.lang.Double" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="139" splitType="Stretch">
+			<image>
+				<reportElement x="181" y="0" width="193" height="40" uuid="7ef6d937-fca6-4710-a9c8-5a7475ee313a"/>
+				<imageExpression><![CDATA["http://" + $P{IP_SERVIDOR} + "/desbravar/imagens/empresa/Logo_Comercio.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="141" y="46" width="272" height="30" uuid="1edfa508-0dc3-4f0f-bf55-2ba260e2a892"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Espelho de Caixa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="77" width="80" height="25" uuid="b2014508-61d6-4e66-8ef3-1126232c828c">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font fontName="Dialog" size="14"/>
+				</textElement>
+				<text><![CDATA[Vendedor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="180" y="77" width="270" height="25" isPrintInFirstWholeBand="true" uuid="d4a7dc06-f309-4f4e-8e2c-98dbec067b18">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOME_USUARIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="100" y="110" width="30" height="25" uuid="ac540a95-cc18-42d3-9e69-4f58bd193494">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Dialog" size="14"/>
+				</textElement>
+				<text><![CDATA[De:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="110" width="32" height="25" uuid="adc81974-aebc-48ad-aa09-b6745944b52a">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Dialog" size="14"/>
+				</textElement>
+				<text><![CDATA[até:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="130" y="110" width="130" height="25" uuid="60181f03-6263-4062-ab48-ffa1712ee462">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Dialog" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DATA_INICIAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="110" width="137" height="25" uuid="9e836cc4-b046-4179-96a9-db2e9de6fb1d">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Dialog" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DATA_FINAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="28" width="555" height="1" uuid="b862e2eb-eaf9-476e-9db5-57ed083f99e6"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="80" height="24" uuid="ae9b2cbf-3aac-49a5-be9d-63b3d7c9f417"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="280" y="0" width="94" height="24" uuid="47d0eee0-c2a4-4339-8e8e-6cf35481dc3a"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="374" y="0" width="96" height="24" uuid="a7f521ea-db36-43a2-9adc-99531435a77a"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Vendedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="0" width="200" height="24" forecolor="#666666" uuid="2c715c7b-bd34-4653-81a8-4036eb15c4e7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Dialog" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[razao_social]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="0" width="85" height="24" forecolor="#666666" uuid="5361e192-2fb1-42c4-b461-3d20ae49e858"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Dialog" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Form. pag]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="39f48c34-b6ee-47f7-8876-c3aaee1eb021"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement style="Detail" x="0" y="0" width="80" height="15" uuid="d0907506-3054-472b-bfe8-94a76689136a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00;¤ -#,##0.00">
+				<reportElement style="Detail" x="280" y="0" width="94" height="15" uuid="90a62c06-c7e0-4f24-a8b1-8182481db0b8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="374" y="0" width="96" height="15" uuid="954c41db-a355-4b5f-b738-ae6088c6f209"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement x="80" y="0" width="200" height="15" uuid="468a72ee-f365-4605-a7b1-67f2cf8c39ef"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{razao_social}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="0" width="85" height="15" uuid="0f244de0-6ebd-4a77-b3d3-22aa5a47baa6"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Dialog"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COLUMN_6}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="53" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="71ea44de-7a93-4d4f-a52c-4c16cd00015b"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField pattern="¤ #,##0.00;¤ -#,##0.00">
+				<reportElement x="450" y="15" width="103" height="25" uuid="8b730f19-b533-4f45-a5d0-d3a1a351a523">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Dialog" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{valor1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="300" y="15" width="140" height="25" uuid="ec416221-85cd-4f03-8c8a-a54df0e1292e">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font fontName="Dialog" size="14"/>
+				</textElement>
+				<text><![CDATA[Total da pagina:]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="46" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="e535a8ac-10a9-4f26-87e0-60b805cdf9c3"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="fff3e988-d444-495e-be94-0eff0d0462e7"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="b6dc2968-370c-49a3-a17a-642c31c3ecd6"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="22" width="555" height="15" uuid="112e9342-cfca-4356-9bcb-71b656429e92"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Desbravar - Sistema desenvolvido e mantido pelo Grupo Caravela - www.grupocaravela.com.br]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="83">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="41" width="197" height="20" uuid="af830ec2-2e35-4486-9a98-85d9954fda6f"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="63" width="555" height="15" uuid="a89defca-b8fb-4dc6-964f-1171ed9a545b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Desbravar - Sistema desenvolvido e mantido pelo Grupo Caravela - www.grupocaravela.com.br]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Column header" x="433" y="41" width="80" height="20" uuid="dc9dd20d-c7af-4bf0-ba98-dc382b217799"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="41" width="40" height="20" uuid="f42d062a-91ec-4161-8427-ae97fc3166f3"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00;¤- #,##0.00">
+				<reportElement x="433" y="5" width="122" height="30" uuid="b2706ee0-df1c-4dae-bc42-2849fd418a3c"/>
+				<textElement>
+					<font fontName="Dialog" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="333" y="5" width="97" height="30" uuid="925ea699-792f-4dd6-9b0a-c92d30ae22cc"/>
+				<textElement textAlignment="Right">
+					<font fontName="Dialog" size="14"/>
+				</textElement>
+				<text><![CDATA[Total Geral:]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

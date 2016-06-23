@@ -45,6 +45,8 @@ import br.com.grupocaravela.render.MoedaRender;
 import br.com.grupocaravela.repositorio.RepositorioCliente;
 import br.com.grupocaravela.repositorio.RepositorioFornecedor;
 import br.com.grupocaravela.tablemodel.TableModelFornecedor;
+import br.com.grupocaravela.util.CriarHistorico;
+import br.com.grupocaravela.util.UsuarioLogado;
 
 import java.awt.Toolkit;
 import javax.swing.border.LineBorder;
@@ -551,6 +553,9 @@ public class JanelaCadastroFornecedores extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Fornecedor foi salva com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "O fornecedor " + f.getRazaoSocial() + " com o id nº " + f.getId() + " foi salvo", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -580,6 +585,10 @@ public class JanelaCadastroFornecedores extends JFrame {
 	}
 
 	private void excluirFornecedor(Fornecedor f) {
+		
+		String n = f.getRazaoSocial();
+		Long id = f.getId();
+		
 		try {
 
 			trx.begin();
@@ -587,6 +596,9 @@ public class JanelaCadastroFornecedores extends JFrame {
 			trx.commit();
 
 			JOptionPane.showMessageDialog(null, "Fornecedor foi removida com sucesso!");
+			
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "O fornecedor " + n + " com o id nº " + id + " foi excluido", dataAtual());
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "ERRO! " + e);
 		}
@@ -658,4 +670,13 @@ public class JanelaCadastroFornecedores extends JFrame {
 
 		}
 	}
+	
+	private java.util.Date dataAtual() {
+
+		java.util.Date hoje = new java.util.Date();
+		// java.util.Date hoje = Calendar.getInstance().getTime();
+		return hoje;
+
+	}
+	
 }
