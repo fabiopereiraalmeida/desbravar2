@@ -291,7 +291,9 @@ public class JanelaHistoricoVendas extends JFrame {
 
 					// trx.begin();
 					Query consulta = manager
-							.createQuery("from VendaCabecalho");
+							.createQuery("from VendaCabecalho where cliente_id in (select id from Cliente where razao_social like '%"
+								+ tfLocalizar.getText() + "%') OR usuario_id in (select id from Usuario where nome like '%"
+								+ tfLocalizar.getText() + "%')");
 					List<VendaCabecalho> listaVendaCabecalho = consulta.getResultList();
 					// trx.commit();
 

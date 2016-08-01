@@ -3,22 +3,13 @@ package br.com.grupocaravela.relatorios;
 import java.net.URL;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.swing.JOptionPane;
-
-import org.hibernate.loader.custom.Return;
 
 import br.com.grupocaravela.configuracao.Empresa;
 import br.com.grupocaravela.objeto.Cliente;
 import br.com.grupocaravela.objeto.EnderecoCliente;
-import br.com.grupocaravela.objeto.FormaPagamento;
-import br.com.grupocaravela.objeto.Rota;
 import br.com.grupocaravela.objeto.Usuario;
-import br.com.grupocaravela.objeto.VendaCabecalho;
 import br.com.grupocaravela.util.ConectaBanco;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;

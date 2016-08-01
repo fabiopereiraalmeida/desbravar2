@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
-<!-- 2016-03-08T12:23:25 -->
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2016-07-28T15:02:19 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProdutoDetalhado" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f6e4db4-9f8f-4ffe-9759-6e1fd142f492">
 	<property name="template.type" value="columnar"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value="ZGVzYnJhdmFyLnByb2R1dG8gQVMgLDIzMSw3MyxkYTgzMTE5OC0xYWU1LTQ0YzEtOTgxYy04NzEy&#xA;ODczNmJiMTQ7ZGVzYnJhdmFyLmNhdGVnb3JpYSBBUyAsMTMzLDYxLDUzMzg2NDBhLWY1OGMtNDE4&#xA;Zi05YmM4LTVmZTIyODBjZDkxYTtkZXNicmF2YXIudW5pZGFkZSBBUyAsMTI0LDE4NCw5ZWRmNTlh&#xA;Ny0zZDU4LTQzZDgtOTVjMi0zODY3MDkzYWMwNmE7"/>
@@ -16,6 +16,7 @@
 		</conditionalStyle>
 	</style>
 	<parameter name="IP_SERVIDOR" class="java.lang.String"/>
+	<parameter name="LOGO" class="java.awt.Image"/>
 	<queryString>
 		<![CDATA[SELECT desbravar.produto.id,
 	desbravar.produto.ativo,
@@ -113,7 +114,7 @@ FROM desbravar.produto
 			</staticText>
 			<image>
 				<reportElement x="181" y="0" width="193" height="40" uuid="cbee373c-f722-40b1-b91f-b86c36a089bf"/>
-				<imageExpression><![CDATA["http://" + $P{IP_SERVIDOR} + "/desbravar/imagens/empresa/Logo_Comercio.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
 			</image>
 		</band>
 	</title>

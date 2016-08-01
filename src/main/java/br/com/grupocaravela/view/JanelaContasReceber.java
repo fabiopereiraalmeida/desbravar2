@@ -15,6 +15,7 @@ import br.com.grupocaravela.aguarde.EsperaLista;
 import br.com.grupocaravela.configuracao.EntityManagerProducer;
 import br.com.grupocaravela.mask.DecimalFormattedField;
 import br.com.grupocaravela.objeto.Caixa;
+import br.com.grupocaravela.objeto.Cargo;
 import br.com.grupocaravela.objeto.Cliente;
 import br.com.grupocaravela.objeto.ContaReceber;
 import br.com.grupocaravela.objeto.VendaCabecalho;
@@ -71,6 +72,8 @@ public class JanelaContasReceber extends JFrame {
 	private JPanel contentPane;
 	private JTextField tfLocalizar;
 	private JTable table;
+	
+	private Cargo cargo = UsuarioLogado.getUsuario().getCargo();
 
 	private TableModelContasReceber tableModelContasReceber;
 	private TableModelListaVendas tableModelListaVendas;
@@ -95,6 +98,8 @@ public class JanelaContasReceber extends JFrame {
 	private DecimalFormattedField tfValorDesconto;
 	private DecimalFormattedField tfValorTotalGeral;
 	private JTextField tfVendedor;
+	private JButton btnExtornarCompravenda;
+	private JTabbedPane tabbedPane;
 
 	/**
 	 * Launch the application.
@@ -124,6 +129,8 @@ public class JanelaContasReceber extends JFrame {
 		tamanhoColunas();
 		
 		tfLocalizar.requestFocus();
+		
+		permicoes();
 /*
 		// Evento ao fechar a janela
 		addWindowListener(new WindowAdapter() {
@@ -176,7 +183,7 @@ public class JanelaContasReceber extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addComponent(tabbedPane,
 				GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE));
@@ -445,25 +452,55 @@ public class JanelaContasReceber extends JFrame {
 				new ImageIcon(JanelaContasReceber.class.getResource("/br/com/grupocaravela/icones/atualizar_24.png")));
 
 		JLabel lblAbater = new JLabel("Abater");
+		
+		btnExtornarCompravenda = new JButton("Extornar compra/venda");
+		btnExtornarCompravenda.setIcon(new ImageIcon(JanelaContasReceber.class.getResource("/br/com/grupocaravela/icones/alerta_vermelho_64.png")));
+		btnExtornarCompravenda.setEnabled(false);
+		btnExtornarCompravenda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Object[] options = { "Sim", "Não" };
+				int i = JOptionPane.showOptionDialog(null,
+						"ATENÇÃO!!! ESTA OPERAÇÃO IRA EXTORNAR(EXCLUIR) A CONTA A RECEBER DO CLIENTE " + tfRazaoSocial.getText().toUpperCase() + " ASSIM COMO A VENDA?", "EXTORNAR CONTA A RECEBER",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+				if (i == JOptionPane.YES_OPTION) {
+					extornar(contaReceber);
+
+				}
+			}
+		});
 		GroupLayout gl_panel_7 = new GroupLayout(panel_7);
-		gl_panel_7.setHorizontalGroup(gl_panel_7.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel_7.createSequentialGroup().addContainerGap().addComponent(lblAbater)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(tfAbater, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnAbater)
-						.addPreferredGap(ComponentPlacement.RELATED, 249, Short.MAX_VALUE).addComponent(btnCancelar)
-						.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnQuitar).addContainerGap()));
-		gl_panel_7
-				.setVerticalGroup(gl_panel_7.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_panel_7.createSequentialGroup()
-								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE).addComponent(btnQuitar)
-										.addComponent(btnCancelar).addComponent(lblAbater)
-										.addComponent(tfAbater, GroupLayout.PREFERRED_SIZE, 31,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(btnAbater))
-								.addContainerGap()));
+		gl_panel_7.setHorizontalGroup(
+			gl_panel_7.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_7.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblAbater)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(tfAbater, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnAbater)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnExtornarCompravenda)
+					.addPreferredGap(ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+					.addComponent(btnCancelar)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnQuitar)
+					.addContainerGap())
+		);
+		gl_panel_7.setVerticalGroup(
+			gl_panel_7.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_7.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnQuitar)
+						.addComponent(btnCancelar)
+						.addComponent(lblAbater)
+						.addComponent(tfAbater, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnAbater)
+						.addComponent(btnExtornarCompravenda, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
 		panel_7.setLayout(gl_panel_7);
 
 		JLabel lblId = new JLabel("Id");
@@ -1019,4 +1056,38 @@ public class JanelaContasReceber extends JFrame {
         table.getColumnModel().getColumn(2).setMinWidth(220);
         
     }
+	
+	private void extornar(ContaReceber cre){
+		
+		try {
+
+			trx.begin();
+			manager.remove(cre);
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A conta a receber do cliente" + cre.getCliente().getRazaoSocial() + " no valor de R$ " + cre.getValorDevido() + " com o id nº " + cre.getId() + " foi extronada com sucesso", dataAtual());
+			manager.remove(cre.getVendaCabecalho());
+			CriarHistorico.criar(UsuarioLogado.getUsuario(), "A venda do cliente" + cre.getCliente().getRazaoSocial() + " no valor de R$ " + cre.getVendaCabecalho().getValorTotal() + " com o id nº " + cre.getVendaCabecalho().getId() + " foi extronada com sucesso", dataAtual());
+			trx.commit();
+
+			JOptionPane.showMessageDialog(null, "Conta a receber e venda extornada com sucesso!");
+			
+			limparTabelaItens();
+			tabbedPane.setSelectedIndex(0);
+			tabbedPane.setEnabledAt(0, true);
+			tabbedPane.setEnabledAt(1, false);
+			limparCampos();
+			
+			limparTabela();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "ERRO! " + e);
+		}		
+	}
+	
+private void permicoes(){		
+		
+		if (cargo.isAcessoContasReceber() && cargo.isAcessoVendas()) {
+			btnExtornarCompravenda.setEnabled(true);			
+		}
+				
+	}
 }
